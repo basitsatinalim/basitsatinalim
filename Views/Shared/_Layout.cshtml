@@ -1,0 +1,66 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>@ViewData["Title"] - basitsatinalimuyg</title>
+	<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+	<link rel="stylesheet" href="~/basitsatinalimuyg.styles.css" asp-append-version="true" />
+	<script src="https://kit.fontawesome.com/9f68437b47.js" crossorigin="anonymous"></script>
+	<script src="~/node_modules/alpinejs/dist/cdn.min.js" defer></script>
+	<script src="~/js/site.js" asp-append-version="true"></script>
+</head>
+<body>
+	<header>
+		<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+			<div class="container-fluid">
+				<a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">basitsatinalimuyg</a>
+				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+						aria-expanded="false" aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+				<div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+					<ul class="navbar-nav flex-grow-1">
+						<li class="nav-item">
+							<a class="nav-link text-dark" asp-area="" asp-controller="Products" asp-action="Index">Home</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link text-dark" asp-area="" asp-controller="Products" asp-action="Index">Products</a>
+						</li>
+					</ul>
+
+					<i class="fa-solid fa-close fa-xl mx-2" title="Clear Cart" style="color:#1e3152; cursor:pointer;"></i>
+
+					<a asp-area="" asp-controller="Cart" asp-action="Index">
+						<i class="fa-solid fa-cart-shopping fa-lg" style="color:#1e3152; position: relative">
+							<i class="fa-solid fa-certificate fa-xs position-absolute"
+							   style="top:5px; right:10px; color:#ef535a;">
+								<span x-data x-cloack x-text="$store.userCart.count" class="text-white position-inherit d-flex justify-content-center" style="font-size:8px">
+								
+								</span>
+							</i>
+						</i>
+
+					</a>
+				</div>
+			</div>
+		</nav>
+	</header>
+	<div class="container">
+		<main role="main" class="pb-3">
+			@RenderBody()
+		</main>
+	</div>
+
+	<footer class="border-top footer text-muted">
+		<div class="container">
+			&copy; 2023 - basitsatinalimuyg - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+		</div>
+	</footer>
+
+	<script src="~/lib/jquery/dist/jquery.min.js"></script>
+	<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+	@await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
