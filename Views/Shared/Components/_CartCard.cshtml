@@ -1,56 +1,8 @@
-@using System.Text.Json;
-@model basitsatinalimuyg.Entities.Product
-
+﻿
 @{
-
-	// <div class="container py-5">
-	// 	<div class="row">
-	// 		@foreach (var item in Model)
-	// 		{
-	// 			<partial name="Components/_ProductCard" model=@item />
-	// 		}
-	// 	</div>
-	// </div>
-
 }
 
-<@* div class="col-md-12 col-lg-4 mb-4 mb-lg-0">
-	<div class="card">
-
-		<img src=@Model.Image
-			 height="250"
-			 class="card-img-top" alt=@Model.Name />
-		<div class="card-body">
-			<div class="d-flex justify-content-between mb-2">
-
-				<div class="ms-auto text-warning">
-					<i class="fa fa-star"></i>
-					<i class="fa fa-star"></i>
-					<i class="fa fa-star"></i>
-					<i class="fa fa-star"></i>
-					<i class="fa fa-star"></i>
-				</div>
-			</div>
-			<div class="d-flex justify-content-between">
-				<p class="small"><a href="#!" class="text-muted">@Model.Category</a></p>
-			</div>
-
-			<div class="d-flex justify-content-between mb-4 gap-3">
-				<h6 class="mb-0 text-truncate">@Model.Name</h6>
-				<h5 class="text-dark mb-0">$@Model.Price</h5>
-			</div>
-
-
-			<div class="d-flex justify-content-between align-items-center">
-				<p class="text-muted mb-0">Available: <span class="fw-bold">6</span></p>
-				<button x-data x-on:click="$store.userCart.add(@JsonSerializer.Serialize(Model))" type="button" class="btn btn-primary">Buy now</button>
-			</div>
-		</div>
-	</div>
-</div> *@
-
-@*
-<div class="row justify-content-center mb-3">
+@* <div class="row justify-content-center mb-3">
 	<div class="col-md-12 col-xl-10">
 		<div class="card shadow-0 border rounded-3">
 			<div class="card-body">
@@ -114,4 +66,4 @@
 			</div>
 		</div>
 	</div>
-</div> *@
+</div>*@
