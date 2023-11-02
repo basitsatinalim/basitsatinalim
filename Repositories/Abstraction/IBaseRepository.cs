@@ -11,6 +11,6 @@ namespace basitsatinalimuyg.Repositories.Abstraction
 		public Task<T[]> GetAllAsync();
 		public Task<T?> AddAsync(T entity);
 		public T? Update(T entity);
-		public Task<T?> DeleteAsync(T entity);
+		public T? Delete(T entity);
 	}
 }

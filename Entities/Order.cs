@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace basitsatinalimuyg.Entities
 {
-	public sealed class Order : BaseEntity
+    public sealed class Order : BaseEntity
 	{
 		public User User { get; set; } = null!;
 		public Guid UserId { get; set; }

@@ -1,8 +1,6 @@
 ﻿using basitsatinalimuyg.Context;
 using basitsatinalimuyg.Entities;
-using basitsatinalimuyg.Entities.Abstraction;
 using basitsatinalimuyg.Repositories.Abstraction;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 
 namespace basitsatinalimuyg.Repositories
@@ -20,14 +18,12 @@ namespace basitsatinalimuyg.Repositories
 		public async Task<T?> AddAsync(T entity)
 		{
 			await _appDbContext.Set<T>().AddAsync(entity);
-			await _appDbContext.SaveChangesAsync();
 			return entity;
 		}
 
-		public async Task<T?> DeleteAsync(T entity)
+		public T? Delete(T entity)
 		{
 			_appDbContext.Set<T>().Remove(entity);
-			await _appDbContext.SaveChangesAsync();
 			return entity;
 		}
 
@@ -39,21 +35,18 @@ namespace basitsatinalimuyg.Repositories
 		public async Task<T[]> GetAllAsync()
 		{
 			var result = await _appDbContext.Set<T>().ToArrayAsync();
-			await _appDbContext.SaveChangesAsync();
 			return result;
 		}
 
 		public T? Update(T entity)
 		{
 			_appDbContext.Set<T>().Update(entity);
-			_appDbContext.SaveChanges();
 			return entity;
 		}
 
 		public T? Add(T entity)
 		{
 			_appDbContext.Set<T>().Add(entity);
-			_appDbContext.SaveChanges();
 			return entity;
 		}
 	}

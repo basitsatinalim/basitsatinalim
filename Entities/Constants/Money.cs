@@ -1,4 +1,22 @@
-﻿namespace basitsatinalimuyg.Entities.Constants
+﻿using System.Text.Json.Serialization;
+
+namespace basitsatinalimuyg.Entities.Constants
 {
-	public record Money(double Amount, CurrencyEnum Currency);
+	public class Money
+	{
+		
+		public Money(decimal amount, CurrencyEnum currency)
+		{
+			Amount = amount;
+			Currency = currency;
+		}
+
+		public decimal Amount { get; set; }
+		public CurrencyEnum Currency { get; set; }
+		public override string ToString()
+		{
+			return $"{Amount} {Currency}";
+		}
+
+	}
 }
