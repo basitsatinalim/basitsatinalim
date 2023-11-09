@@ -1,125 +1,54 @@
-﻿@* @using System.Text.Json;
-@model basitsatinalimuyg.Models.Product
+﻿@using System.Text.Json;
+@using basitsatinalimuyg.Entities.Constants;
+@model basitsatinalimuyg.Models.ProductViewModel
 
 @{
 }
 
-<div class="col-md-12 col-lg-4 mb-4 mb-lg-0">
-	<div class="card">
-
-		<img src=@Model.Image
-			 height="250"
-			 class="card-img-top" alt=@Model.Name />
+<div class="col-md-6 col-lg-3 mb-4 mb-lg-0">
+	<div class="card p-3" style="box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);">
+		<img src=@Model.ImageUrl
+			 class="card-img-top"
+			 alt=@Model.Name
+			 style="max-width: 100%; border-radius: 5px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);" />
 		<div class="card-body">
-			<div class="d-flex justify-content-between mb-2">
 
-				<div class="ms-auto text-warning">
-					<i class="fa fa-star"></i>
-					<i class="fa fa-star"></i>
-					<i class="fa fa-star"></i>
-					<i class="fa fa-star"></i>
-					<i class="fa fa-star"></i>
-				</div>
-			</div>
 			<div class="d-flex justify-content-between">
 				<p class="small"><a href="#!" class="text-muted">@Model.Category</a></p>
 			</div>
 
 			<div class="d-flex justify-content-between mb-4 gap-3">
 				<h6 class="mb-0 text-truncate">@Model.Name</h6>
-				<h5 class="text-dark mb-0">$@Model.Price</h5>
+				<div class="d-flex justify-content-end align-items-center gap-1" style="color:#000000;">
+					@{
+						if (Model.Price?.Currency == CurrencyEnum.TRY)
+						{
+
+							<h5 class="text-dark mb-0 my-0">@Model.Price.Amount</h5>
+							<i class="fa-solid fa-turkish-lira-sign"></i>
+						}
+						else if (Model.Price?.Currency == CurrencyEnum.EUR)
+						{
+							<i class="fa-solid fa-euro-sign "></i>
+							<h5 class="text-dark mb-0 my-0">@Model.Price.Amount</h5>
+
+						}
+						else
+						{
+							<i class="fa-solid fa-dollar-sign"></i>
+							<h5 class="text-dark mb-0 my-0">@Model.Price?.Amount</h5>
+						}
+
+					}
+				</div>
 			</div>
 
 
 			<div class="d-flex justify-content-between align-items-center">
-				<p class="text-muted mb-0">Available: <span class="fw-bold">6</span></p>
+				<p class="text-muted mb-0">Available: <span class="fw-bold">@Model.Stock</span></p>
 				<button x-data x-on:click="$store.userCart.add(@JsonSerializer.Serialize(Model))" type="button" class="btn btn-primary">Buy now</button>
 			</div>
 		</div>
 	</div>
 </div>
 
-
-@* <div class="card text-black">
-	<img src=@Model.Image
-		 class="card-img-top" alt=@Model.Name />
-	<div class="card-body">
-		<div class="text-center">
-			<h5 class="card-title">@Model.Name</h5>
-			<p class="text-muted mb-4">Apple pro display XDR</p>
-		</div>
-		<div class="d-flex justify-content-end gap-2 total font-weight-bold mt-4">
-			<span>Price:</span><span>@Model.Price</span>
-		</div>
-		<div class="d-flex justify-content-center mt-4 w-ful">
-			<button class="btn btn-info">Buy Item</button>
-		</div>
-	</div>
-</div> *@
-
-@*
-<div class="row justify-content-center mb-3">
-	<div class="col-md-12 col-xl-10">
-		<div class="card shadow-0 border rounded-3">
-			<div class="card-body">
-				<div class="row">
-					<div class="col-md-12 col-lg-3 col-xl-3 mb-4 mb-lg-0">
-						<div class="bg-image hover-zoom ripple rounded ripple-surface">
-							<img src="https://mdbcdn.b-cdn.net/img/Photos/Horizontal/E-commerce/Products/img%20(4).webp"
-								 class="w-100" />
-							<a href="#!">
-								<div class="hover-overlay">
-									<div class="mask" style="background-color: rgba(253, 253, 253, 0.15);"></div>
-								</div>
-							</a>
-						</div>
-					</div>
-					<div class="col-md-6 col-lg-6 col-xl-6">
-						<h5>Quant trident shirts</h5>
-						<div class="d-flex flex-row">
-							<div class="text-danger mb-1 me-2">
-								<i class="fa fa-star"></i>
-								<i class="fa fa-star"></i>
-								<i class="fa fa-star"></i>
-								<i class="fa fa-star"></i>
-							</div>
-							<span>310</span>
-						</div>
-						<div class="mt-1 mb-0 text-muted small">
-							<span>100% cotton</span>
-							<span class="text-primary"> • </span>
-							<span>Light weight</span>
-							<span class="text-primary"> • </span>
-							<span>Best finish<br /></span>
-						</div>
-						<div class="mb-2 text-muted small">
-							<span>Unique design</span>
-							<span class="text-primary"> • </span>
-							<span>For men</span>
-							<span class="text-primary"> • </span>
-							<span>Casual<br /></span>
-						</div>
-						<p class="text-truncate mb-4 mb-md-0">
-							There are many variations of passages of Lorem Ipsum available, but the
-							majority have suffered alteration in some form, by injected humour, or
-							randomised words which don't look even slightly believable.
-						</p>
-					</div>
-					<div class="col-md-6 col-lg-3 col-xl-3 border-sm-start-none border-start">
-						<div class="d-flex flex-row align-items-center mb-1">
-							<h4 class="mb-1 me-1">$13.99</h4>
-							<span class="text-danger"><s>$20.99</s></span>
-						</div>
-						<h6 class="text-success">Free shipping</h6>
-						<div class="d-flex flex-column mt-4">
-							<button class="btn btn-primary btn-sm" type="button">Details</button>
-							<button class="btn btn-outline-primary btn-sm mt-2" type="button">
-								Add to wishlist
-							</button>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-</div> *@

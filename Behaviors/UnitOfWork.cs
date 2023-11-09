@@ -11,11 +11,34 @@ namespace basitsatinalimuyg.Behaviors
 		}
 		public async Task<int> SaveChangesAsync()
 		{
-			return await _dbContext.SaveChangesAsync();
+			using var transaction = _dbContext.Database.BeginTransaction();
+			try
+			{
+				var result = await _dbContext.SaveChangesAsync();
+				transaction.Commit();
+				return result;
+			}
+			catch
+			{
+				transaction.Rollback();
+				return 0;
+			}
 		}
 		public async Task<int> SaveChangesAsync(CancellationToken cancellationToken)
 		{
-			return await _dbContext.SaveChangesAsync(cancellationToken);
+			
+			using var transaction = _dbContext.Database.BeginTransaction();
+			try
+			{
+				var result = await _dbContext.SaveChangesAsync(cancellationToken);
+				transaction.Commit();
+				return result;
+			}
+			catch
+			{
+				transaction.Rollback();
+				return 0;
+			}
 		}
 
 	}

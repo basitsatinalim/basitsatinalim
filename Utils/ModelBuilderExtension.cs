@@ -47,13 +47,12 @@ namespace basitsatinalimuyg.Utils
 			return JsonSerializer.Serialize(value, _jsonOptions);
 		}
 
-		private static Money? ConvertToMoney(string value)
+		private static Money ConvertToMoney(string value)
 		{
-			Console.WriteLine(value);
 			return JsonSerializer.Deserialize<Money>(value, new JsonSerializerOptions
 			{
 				PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-			});
+			}) ?? new Money(10, CurrencyEnum.USD);
 		}
 	}
 }

@@ -2,24 +2,34 @@
 using Microsoft.EntityFrameworkCore;
 using basitsatinalimuyg.Context;
 using basitsatinalimuyg.Entities;
+using AutoMapper;
+using basitsatinalimuyg.Models;
+using basitsatinalimuyg.Config;
+using basitsatinalimuyg.Services.Abstraction;
+using basitsatinalimuyg.Services;
 
 namespace basitsatinalimuyg.Controllers
 {
     public class ProductsController : Controller
     {
         private readonly AppDbContext _context;
+        private readonly IMapper _mapper;
+        private readonly IProductService _productService;
 
-        public ProductsController(AppDbContext context)
+        public ProductsController(AppDbContext context, IMapper mapper, IProductService productService)
         {
             _context = context;
+            _mapper = mapper;
+            _productService = productService;
         }
 
         // GET: Products
         public async Task<IActionResult> Index()
         {
-              return _context.Products != null ? 
-                          View(await _context.Products.ToListAsync()) :
-                          Problem("Entity set 'AppDbContext.Products'  is null.");
+
+            var products = await _productService.GetAllProducts();
+
+            return View(_mapper.CastListObject<ProductViewModel, ICollection<Product>>(products));
         }
 
         // GET: Products/Details/5
@@ -146,14 +156,14 @@ namespace basitsatinalimuyg.Controllers
             {
                 _context.Products.Remove(product);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool ProductExists(Guid id)
         {
-          return (_context.Products?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.Products?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

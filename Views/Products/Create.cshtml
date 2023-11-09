@@ -1,4 +1,5 @@
-﻿@model basitsatinalimuyg.Entities.Product
+﻿@using basitsatinalimuyg.Entities.Constants;
+@model basitsatinalimuyg.Entities.Product
 
 @{
     ViewData["Title"] = "Create";
@@ -34,7 +35,12 @@
             </div>
             <div class="form-group">
                 <label asp-for="Category" class="control-label"></label>
-                <input asp-for="Category" class="form-control" />
+                <select asp-for="Category" class="form-control" id="category" name="category">
+                    @foreach (var category in Enum.GetNames(typeof(CategoryEnum)))
+                    {
+                        <option value="@category">@category</option>
+                    }
+                </select>
                 <span asp-validation-for="Category" class="text-danger"></span>
             </div>
             <div class="form-group">
