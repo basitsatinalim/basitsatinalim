@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace basitsatinalimuyg.Repositories
 {
-	public class BaseRepository<T> : IBaseRepository<T> where T : BaseEntity
+	public class BaseRepository<T> : IRepository<T> where T : BaseEntity
 
 	{
 		private readonly AppDbContext _appDbContext;

@@ -6,25 +6,24 @@ using AutoMapper;
 using basitsatinalimuyg.Models;
 using basitsatinalimuyg.Config;
 using basitsatinalimuyg.Services.Abstraction;
-using basitsatinalimuyg.Services;
+using Microsoft.AspNetCore.Authorization;
+using basitsatinalimuyg.Constants;
 
 namespace basitsatinalimuyg.Controllers
 {
-    public class ProductsController : Controller
+    public class ProductController : Controller
     {
         private readonly AppDbContext _context;
         private readonly IMapper _mapper;
         private readonly IProductService _productService;
 
-        public ProductsController(AppDbContext context, IMapper mapper, IProductService productService)
+        public ProductController(AppDbContext context, IMapper mapper, IProductService productService)
         {
             _context = context;
             _mapper = mapper;
             _productService = productService;
         }
-
-        // GET: Products
-        public async Task<IActionResult> Index()
+		public async Task<IActionResult> Index()
         {
 
             var products = await _productService.GetAllProducts();
@@ -65,7 +64,6 @@ namespace basitsatinalimuyg.Controllers
         {
             if (ModelState.IsValid)
             {
-                product.Id = Guid.NewGuid();
                 _context.Add(product);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));

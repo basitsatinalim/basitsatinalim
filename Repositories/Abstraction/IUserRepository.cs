@@ -2,7 +2,8 @@
 
 namespace basitsatinalimuyg.Repositories.Abstraction
 {
-	public interface IProductRepository : IRepository<Product>
+	public interface IUserRepository : IRepository<User>
 	{
+		Task<User?> GetUserByEmail(string? email);
 	}
 }
