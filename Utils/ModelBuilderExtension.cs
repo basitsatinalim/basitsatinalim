@@ -1,11 +1,11 @@
-﻿using basitsatinalimuyg.Entities.Constants;
+﻿using basitsatinalimuyg.Constants;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System.Text.Json;
 
 namespace basitsatinalimuyg.Utils
 {
-	public static class ModelBuilderExtensions
+    public static class ModelBuilderExtensions
 	{
 		public static void ApplyMoneyValueConverter(this ModelBuilder modelBuilder)
 		{

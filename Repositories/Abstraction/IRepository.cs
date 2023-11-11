@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace basitsatinalimuyg.Repositories.Abstraction
 {
-	public interface IBaseRepository<T> where T : BaseEntity
+	public interface IRepository<T> where T : BaseEntity
 	{
 		public T? Add(T entity);
 		public Task<T?> GetAsync(T entity);

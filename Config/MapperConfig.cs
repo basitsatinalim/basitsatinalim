@@ -14,6 +14,12 @@ namespace basitsatinalimuyg.Config
             CreateMap<Product, ProductViewModel>();
             CreateMap<ProductDto, Product>();
 
+            CreateMap<User, UserViewModel>();
+            CreateMap<UserDto, User>();
+
+            CreateMap<RegisterDto, User>();
+            CreateMap<LoginDto, User>();
+
         }
     }
 
