@@ -1,6 +1,8 @@
-﻿@model basitsatinalimuyg.Models.ProductViewModel
+﻿@model basitsatinalimuyg.Models.CartViewModel
+@using basitsatinalimuyg.Constants;
 
-@{}
+@{
+}
 
 <div class="row justify-content-center mb-3">
 	<div class="col-md-12 col-xl-10">
@@ -9,7 +11,7 @@
 				<div class="row">
 					<div class="col-md-12 col-lg-3 col-xl-3 mb-4 mb-lg-0">
 						<div class="bg-image hover-zoom ripple rounded ripple-surface">
-							<img src="https://mdbcdn.b-cdn.net/img/Photos/Horizontal/E-commerce/Products/img%20(4).webp"
+							<img :src="item.imageUrl"
 								 class="w-100" />
 							<a href="#!">
 								<div class="hover-overlay">
@@ -19,16 +21,16 @@
 						</div>
 					</div>
 					<div class="col-md-6 col-lg-6 col-xl-6">
-						<h5>Quant trident shirts</h5>
-						<div class="d-flex flex-row">
-							<div class="text-danger mb-1 me-2">
-								<i class="fa fa-star"></i>
-								<i class="fa fa-star"></i>
-								<i class="fa fa-star"></i>
-								<i class="fa fa-star"></i>
-							</div>
-							<span>310</span>
+						<h5 class="mb-4" x-text="item.name"></h5>
+						@* 						<div class="d-flex flex-row">
+						<div class="text-danger mb-1 me-2">
+						<i class="fa fa-star"></i>
+						<i class="fa fa-star"></i>
+						<i class="fa fa-star"></i>
+						<i class="fa fa-star"></i>
 						</div>
+						<span>310</span>
+						</div> *@
 						<div class="mt-1 mb-0 text-muted small">
 							<span>100% cotton</span>
 							<span class="text-primary"> • </span>
@@ -36,14 +38,7 @@
 							<span class="text-primary"> • </span>
 							<span>Best finish<br /></span>
 						</div>
-						<div class="mb-2 text-muted small">
-							<span>Unique design</span>
-							<span class="text-primary"> • </span>
-							<span>For men</span>
-							<span class="text-primary"> • </span>
-							<span>Casual<br /></span>
-						</div>
-						<p class="text-truncate mb-4 mb-md-0">
+						<p x-text="item.description" class=" mb-4 mb-md-0">
 							There are many variations of passages of Lorem Ipsum available, but the
 							majority have suffered alteration in some form, by injected humour, or
 							randomised words which don't look even slightly believable.
@@ -51,15 +46,37 @@
 					</div>
 					<div class="col-md-6 col-lg-3 col-xl-3 border-sm-start-none border-start">
 						<div class="d-flex flex-row align-items-center mb-1">
-							<h4 class="mb-1 me-1">$13.99</h4>
-							<span class="text-danger"><s>$20.99</s></span>
+
+							<template x-if="item.currency === 0">
+								<h4 x-text="'₺'+item.amount" class="mb-1 me-1"></h4>
+							</template>
+							<template x-if="item.currency === 1">
+								<h4 x-text="'$'+item.amount" class="mb-1 me-1"></h4>
+							</template>
+							<template x-if="item.currency === 2">
+								<h4 x-text="'€'+item.amount" class="mb-1 me-1"></h4>
+							</template>
 						</div>
 						<h6 class="text-success">Free shipping</h6>
 						<div class="d-flex flex-column mt-4">
 							<button class="btn btn-primary btn-sm" type="button">Details</button>
-							<button class="btn btn-outline-primary btn-sm mt-2" type="button">
+							<button class="btn btn-outline-primary btn-sm mt-2 mb-4" type="button">
 								Add to wishlist
 							</button>
+							<div class="input-group">
+								<span class="input-group-prepend">
+									<button type="button" class="btn btn-outline-secondary btn-number" data-type="minus">
+										<i class="fa fa-minus"></i>
+									</button>
+								</span>
+								<input class="form-control form-control-sm" type="number" :value="item.count" min="1" style="">
+								<span class="input-group-append">
+									<button type="button" class="btn btn-outline-secondary btn-number position-relative" data-type="plus" style="border-radius:50%;">
+										<i class="fa fa-plus"></i>
+									</button>
+								</span>
+							</div>
+
 						</div>
 					</div>
 				</div>

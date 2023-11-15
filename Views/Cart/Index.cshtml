@@ -1,0 +1,10 @@
+﻿@model basitsatinalimuyg.Models.CartViewModel
+@{
+}
+
+<div x-data="{cartItems: $store.userCart.items}">
+	<template x-for="item in cartItems">
+		<partial name="Components/_CartCard" /> 
+	</template>
+</div>
+

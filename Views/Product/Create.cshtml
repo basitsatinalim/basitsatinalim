@@ -1,8 +1,8 @@
 ﻿@using basitsatinalimuyg.Constants;
-@model basitsatinalimuyg.Entities.Product
+@model basitsatinalimuyg.Dtos.ProductDto
 
 @{
-    ViewData["Title"] = "Create";
+	ViewData["Title"] = "Create";
 }
 
 <h1>Create</h1>
@@ -10,62 +10,111 @@
 <h4>Product</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Price" class="control-label"></label>
-                <input asp-for="Price" class="form-control" />
-                <span asp-validation-for="Price" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ImageUrl" class="control-label"></label>
-                <input asp-for="ImageUrl" class="form-control" />
-                <span asp-validation-for="ImageUrl" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Category" class="control-label"></label>
-                <select asp-for="Category" class="form-control" id="category" name="category">
-                    @foreach (var category in Enum.GetNames(typeof(CategoryEnum)))
-                    {
-                        <option value="@category">@category</option>
-                    }
-                </select>
-                <span asp-validation-for="Category" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Stock" class="control-label"></label>
-                <input asp-for="Stock" class="form-control" />
-                <span asp-validation-for="Stock" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CreatedAt" class="control-label"></label>
-                <input asp-for="CreatedAt" class="form-control" />
-                <span asp-validation-for="CreatedAt" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UpdatedAt" class="control-label"></label>
-                <input asp-for="UpdatedAt" class="form-control" />
-                <span asp-validation-for="UpdatedAt" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
+	<div class="col-md-4">
+		<form asp-action="Create" class="row g-3 needs-validation" novalidate>
+			<div class="col-md-4">
+				<label asp-for="Name" for="name" class="form-label">Name</label>
+				<input asp-for="Name" type="text" class="form-control" id="name" required>
+				<div class="invalid-feedback">
+					Please enter a valid name.
+				</div>
+			</div>
+			<div class="col-md-4">
+				<label asp-for="Description" for="description" class="form-label">Description</label>
+				<textarea asp-for="Description" type="" class="form-control" id="description" required>
+</textarea>
+				<div class="invalid-feedback">
+					Please enter the description.
+				</div>
+			</div>
+
+			<div class="col-md-4">
+				<label asp-for="Amount" for="amount" class="form-label">Amount</label>
+				<div class="input-group has-validation">
+					<input asp-for="Amount" type="number" step=".01" class="form-control" id="amount" required>
+					<div class="invalid-feedback">
+						Amount is required field.
+					</div>
+				</div>
+			</div>
+
+
+			<div class="col-md-6">
+				<label asp-for="Currency" for="currency" class="form-label">Currency</label>
+				<select asp-for="Currency" class="form-select" id="currency" name="currency" required selected>
+					@foreach (var currency in Enum.GetNames<CurrencyEnum>().Select((value, index) => (value, index)))
+					{
+						<option value="@currency.index">@currency.value</option>
+					}
+				</select>
+				<div class="invalid-feedback">
+					Currency is required field.
+				</div>
+			</div>
+
+			<div class="col-md-6">
+				<label asp-for="Category" for="category" class="form-label">Category</label>
+				<select asp-for="Category" class="form-select" id="category" name="category" required selected>
+					@foreach (var category in Enum.GetNames<CategoryEnum>().Select((value, index) => (value, index)))
+					{
+						<option value="@category.index">@category.value</option>
+					}
+				</select>
+				<div class="invalid-feedback">
+					Category is required field.
+				</div>
+			</div>
+
+			<div class="col-md-4">
+				<label asp-for="Stock" for="stock" class="form-label">Stock</label>
+				<div class="input-group has-validation">
+					<input asp-for="Stock" type="number" step="1" class="form-control" id="stock" required>
+					<div class="invalid-feedback">
+						You need to provide the stock.
+					</div>
+				</div>
+			</div>
+
+			<div class="col-md-4">
+				<label asp-for="ImageUrl" for="imgurl" class="form-label">Image Url</label>
+				<input asp-for="ImageUrl" type="text" class="form-control" id="imgurl" required>
+				<div class="invalid-feedback">
+					Please enter a image url.
+				</div>
+			</div>
+
+			<div class="col-12">
+				<button class="btn btn-primary" type="submit">Submit form</button>
+			</div>
+		</form>
+
+	</div>
 </div>
 
+
 <div>
-    <a asp-action="Index">Back to List</a>
+	<a asp-action="Index">Back to List</a>
 </div>
+
+<script>
+	(function () {
+		'use strict'
+
+		// Fetch all the forms we want to apply custom Bootstrap validation styles to
+		var forms = document.querySelectorAll('.needs-validation')
+
+		// Loop over them and prevent submission
+		Array.prototype.slice.call(forms)
+			.forEach(function (form) {
+				form.addEventListener('submit', function (event) {
+					if (!form.checkValidity()) {
+						event.preventDefault()
+						event.stopPropagation()
+					}
+
+					form.classList.add('was-validated')
+				}, false)
+			})
+	})()
+</script>
 

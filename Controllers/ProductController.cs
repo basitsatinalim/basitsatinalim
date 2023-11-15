@@ -8,6 +8,7 @@ using basitsatinalimuyg.Config;
 using basitsatinalimuyg.Services.Abstraction;
 using Microsoft.AspNetCore.Authorization;
 using basitsatinalimuyg.Constants;
+using basitsatinalimuyg.Dtos;
 
 namespace basitsatinalimuyg.Controllers
 {
@@ -28,7 +29,7 @@ namespace basitsatinalimuyg.Controllers
 
             var products = await _productService.GetAllProducts();
 
-            return View(_mapper.CastListObject<ProductViewModel, ICollection<Product>>(products));
+            return View(_mapper.CastListObject<ProductViewModel, ICollection<Product?>>(products));
         }
 
         // GET: Products/Details/5
@@ -49,23 +50,23 @@ namespace basitsatinalimuyg.Controllers
             return View(product);
         }
 
-        // GET: Products/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Products/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,Description,Amount,Currency,ImageUrl,Category,Stock,Id,CreatedAt,UpdatedAt")] Product product)
+        public async Task<IActionResult> Create([Bind("Name,Description,Amount,Currency,ImageUrl,Category,Stock")] ProductDto product)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(product);
-                await _context.SaveChangesAsync();
+                var productEntity = await _productService.CreateProduct(product);
+               
+                if  (productEntity == null)
+                {
+					return Problem("Product entity could not created.");
+				}
                 return RedirectToAction(nameof(Index));
             }
             return View(product);

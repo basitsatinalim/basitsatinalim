@@ -21,11 +21,13 @@ namespace basitsatinalimuyg.Services
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<Product> CreateProduct(ProductDto newProduct)
+        public async Task<Product?> CreateProduct(ProductDto newProduct)
         {
-            var response = _mapper.Map<Product>(newProduct);
+            var productEntity = _mapper.Map<Product>(newProduct);
 
-            var product =  await _productRepository.AddAsync(response);
+            Console.WriteLine(productEntity);
+
+            var product =  await _productRepository.AddAsync(productEntity);
 
             await _unitOfWork.SaveChangesAsync();
 

@@ -8,7 +8,7 @@ document.addEventListener('alpine:init', () => {
             const cartItem = this.items.find(item => item.id === newItem.Id);
 
             if (!cartItem) {
-                newItem = { id: newItem.Id, name: newItem.Name, count: 1, amount: parseFloat(newItem.Price.Amount), currency: newItem.Price.Currency };
+                newItem = { id: newItem.Id, name: newItem.Name, description: newItem.Description, imageUrl: newItem.ImageUrl, category: newItem.Category, stock: newItem.Stock, count: 1, amount: parseFloat(newItem.Price.Amount), currency: newItem.Price.Currency };
                 this.items.push(newItem);
                 this.count += 1;
 

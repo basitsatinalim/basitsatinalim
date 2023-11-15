@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using basitsatinalimuyg.Constants;
 using basitsatinalimuyg.Dtos;
 using basitsatinalimuyg.Entities;
 using basitsatinalimuyg.Models;
@@ -12,8 +13,9 @@ namespace basitsatinalimuyg.Config
         public MapperConfig()
         {
             CreateMap<Product, ProductViewModel>();
-            CreateMap<ProductDto, Product>();
 
+            CreateMap<ProductDto, Product>()
+              .ForMember(o => o.Price, b => b.MapFrom(z => new Money(z.Amount, z.Currency)));
             CreateMap<User, UserViewModel>();
             CreateMap<UserDto, User>();
 
@@ -36,7 +38,7 @@ namespace basitsatinalimuyg.Config
 
             return result;
 
-		}
+        }
 
-}
+    }
 }
