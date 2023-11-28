@@ -5,17 +5,17 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace basitsatinalimuyg.Entities
 {
-    public sealed class Order : BaseEntity
+	public sealed class Order : BaseEntity
 	{
 		public User User { get; set; } = null!;
 		public Guid UserId { get; set; }
-		public ICollection<OrderLineItem>? Orders { get; set; }
+		public ICollection<OrderLineItem>? OrderLineItems { get; set; } = new List<OrderLineItem>();
 		public OrderStatusEnum? Status { get; set; }
-		[Column(TypeName = "jsonb")]
-		public string? Total { get; set; }
+		public Money? Total { get; set; }
+		public Guid? ShippingAddressId { get; set; }
+		public Payment? Payment { get; set; }
 		[DataType(DataType.Date)]
-		public DateTime? Date { get; set; }
-		public string? Note { get; set; }
+		public DateTime? Date { get; set; } = DateTime.Now;
 
 	}
 
