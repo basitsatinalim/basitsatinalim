@@ -1,0 +1,127 @@
+﻿@using basitsatinalimuyg.Constants;
+@using basitsatinalimuyg.Services.Abstraction;
+
+@{
+
+	UserViewModel? user = null;
+
+	if (User.Identity != null && User.Identity.IsAuthenticated)
+	{
+		var userId = Guid.Parse(User.Identity.Name!);
+
+		user = await Context.RequestServices.GetService<IUserService>()!.GetUserById(userId);
+
+	}
+
+}
+
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top"
+	style="background: rgba(222, 208, 183, 0.2)!important;">
+	<div class="container-fluid mx-4">
+		<a class="navbar-brand" asp-action="Index" asp-controller="Home">
+			<img src="~/assets/shopping_cart.svg" alt="" class="" width="50px" height="40px">
+		</a>
+		<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+			aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="navbarSupportedContent">
+			<form class="me-3" asp-action="Index" asp-controller="Product" method="get">
+				<div class="form-white input-group gap-1" style="width: 250px;">
+					<input name="search" type="search" class="form-control rounded" id="search" placeholder="Search product"
+						aria-label="Search" aria-describedby="search-addon" />
+					<button type="submit" class="input-group-text rounded"><i class="fa-solid fa-magnifying-glass"></i></button>
+				</div>
+			</form>
+			<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+				<li class="nav-item">
+					<a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+				</li>
+				<li class="nav-item dropdown">
+					<button class="nav-link dropdown-toggle" id="shopDD" data-bs-toggle="dropdown"
+						aria-expanded="false">Shop</button>
+					<ul class="dropdown-menu" aria-labelledby="shopDD">
+						<li><a class="dropdown-item" asp-controller="Product" asp-action="Index">All Products</a></li>
+						<li>
+							<hr class="dropdown-divider">
+						</li>
+						<li><a class="dropdown-item" href="#!">Popular Items</a></li>
+						<li><a class="dropdown-item" href="#!">New Arrivals</a></li>
+					</ul>
+				</li>
+			</ul>
+			<ul class="navbar-nav d-flex flex-row ms-auto me-2 align-items-center">
+
+				@if (user != null)
+				{
+					<li class="nav-item me-3 me-lg-2 dropdown">
+						<button class="nav-link dropdown-toggle" id="navbarDropdown1" data-bs-toggle="dropdown" aria-expanded="false">
+							@if (!string.IsNullOrEmpty(user?.ImageUrl))
+							{
+								<img src="@user.ImageUrl" class="rounded-circle" height="40" width="40" alt="" loading="lazy" />
+							}
+							else if (user?.Gender == false)
+							{
+								<img src="~/assets/man_placeholder.svg" class="rounded-circle" height="40" alt="" loading="lazy" />
+							}
+							else
+							{
+								<img src="~/assets/woman_placeholder.svg" class="rounded-circle" height="40" alt="" loading="lazy" />
+							}
+
+						</button>
+						<ul class="dropdown-menu" aria-labelledby="navbarDropdown1">
+							<li><a class="dropdown-item text-truncate" asp-action="Index" asp-controller="Profile"
+									style="max-width:170px">Welcome, @user!.Name</a></li>
+							<li>
+								<hr class="dropdown-divider" />
+							</li>
+							<li>
+								<a asp-action="Logout" asp-controller="Auth" class="dropdown-item"><i
+										class="fa-solid fa-right-from-bracket"></i> Logout</a>
+							</li>
+						</ul>
+					</li>
+				}
+				else
+				{
+					<li class="nav-item me-3 me-lg-2 dropdown">
+						<button class="nav-link dropdown-toggle" id="extraActions" data-bs-toggle="dropdown" aria-expanded="false">
+							<i class="fas fa-plus"></i>
+						</button>
+						<ul class="dropdown-menu" aria-labelledby="extraActions">
+							<li>
+								<a asp-action="Login" asp-controller="Auth" class="dropdown-item d-flex col align-items-center gap-2">
+									<i class="fa-solid fa-right-to-bracket" style="color: #000000;"></i>
+									<span>Sign In</span>
+								</a>
+							<li>
+							<li>
+								<hr class="dropdown-divider" />
+							</li>
+							<li>
+								<a asp-action="Register" asp-controller="Auth" class="dropdown-item d-flex col align-items-center gap-2">
+									<i class="fa-solid fa-user-plus" style="color: #000000;"></i>
+									<span>Sign Up</span>
+								</a>
+							<li>
+
+						</ul>
+					</li>
+				}
+				<li class="nav-item me-3 me-lg-0 d-flex align-items-center">
+					<form asp-action="Index" asp-controller="Cart">
+						<button class="btn btn-outline-dark" type="submit">
+							<i class="bi-cart-fill me-1"></i>Cart
+							<span x-data x-cloack x-text="$store.userCart.count"
+								class="badge bg-dark text-white ms-1 rounded-pill">0</span>
+
+						</button>
+					</form>
+				</li>
+
+			</ul>
+		</div>
+	</div>
+</nav>

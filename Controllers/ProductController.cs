@@ -2,54 +2,73 @@
 using Microsoft.EntityFrameworkCore;
 using basitsatinalimuyg.Context;
 using basitsatinalimuyg.Entities;
-using AutoMapper;
-using basitsatinalimuyg.Models;
-using basitsatinalimuyg.Config;
 using basitsatinalimuyg.Services.Abstraction;
-using Microsoft.AspNetCore.Authorization;
 using basitsatinalimuyg.Constants;
 using basitsatinalimuyg.Dtos;
+using Microsoft.AspNetCore.Authorization;
 
 namespace basitsatinalimuyg.Controllers
 {
     public class ProductController : Controller
     {
-        private readonly AppDbContext _context;
-        private readonly IMapper _mapper;
         private readonly IProductService _productService;
 
-        public ProductController(AppDbContext context, IMapper mapper, IProductService productService)
+        public ProductController(IProductService productService)
         {
-            _context = context;
-            _mapper = mapper;
             _productService = productService;
         }
-		public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index([FromQuery(Name = "category")] CategoryEnum? category, [FromQuery(Name = "search")] string? search)
         {
+
+
+            if (category != null)
+            {
+                var filtredProducts = await _productService.GetFilteredProducts(category);
+
+                return View(filtredProducts);
+            }
+            if (search != null)
+            {
+                var filtredProducts = await _productService.GetSearchedProducts(search);
+
+                return View(filtredProducts);
+            }
 
             var products = await _productService.GetAllProducts();
 
-            return View(_mapper.CastListObject<ProductViewModel, ICollection<Product?>>(products));
+            return View(products);
+
         }
 
-        // GET: Products/Details/5
         public async Task<IActionResult> Details(Guid? id)
         {
-            if (id == null || _context.Products == null)
+            var productId = id?.ToString();
+            if (productId == null)
             {
                 return NotFound();
             }
 
-            var product = await _context.Products
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (product == null)
-            {
-                return NotFound();
-            }
+            var product = await _productService.GetProductById(Guid.Parse(productId));
 
             return View(product);
         }
 
+        [HttpGet]
+        [ActionName("JsonDetails")]
+        public async Task<IActionResult> JsonDetails(Guid? id)
+        {
+
+            var productId = id?.ToString();
+            if (productId == null)
+            {
+                return NotFound();
+            }
+
+            var product = await _productService.GetProductById(Guid.Parse(productId));
+
+            return Ok(product);
+        }
+        //create
         public IActionResult Create()
         {
             return View();
@@ -62,81 +81,56 @@ namespace basitsatinalimuyg.Controllers
             if (ModelState.IsValid)
             {
                 var productEntity = await _productService.CreateProduct(product);
-               
-                if  (productEntity == null)
+
+                if (productEntity == null)
                 {
-					return Problem("Product entity could not created.");
-				}
+                    return Problem("Product entity could not created.");
+                }
                 return RedirectToAction(nameof(Index));
             }
+
             return View(product);
         }
 
-        // GET: Products/Edit/5
+        [HttpGet]
+        [Authorize(Roles = $"{UserRoles.ROLE_ADMIN}")]
         public async Task<IActionResult> Edit(Guid? id)
         {
-            if (id == null || _context.Products == null)
+            var productId = id?.ToString();
+            if (productId == null)
             {
                 return NotFound();
             }
 
-            var product = await _context.Products.FindAsync(id);
-            if (product == null)
-            {
-                return NotFound();
-            }
+            var product = await _productService.GetProductById(Guid.Parse(productId));
+
             return View(product);
         }
 
-        // POST: Products/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Name,Description,Price,ImageUrl,Category,Stock,Id,CreatedAt,UpdatedAt")] Product product)
+        [Authorize(Roles = $"{UserRoles.ROLE_ADMIN}")]
+        public async Task<IActionResult> Edit(Guid id, [Bind("Name,Description,Amount,Currency,ImageUrl,Category,Stock")] ProductDto product)
         {
-            if (id != product.Id)
-            {
-                return NotFound();
-            }
-
             if (ModelState.IsValid)
             {
-                try
-                {
-                    _context.Update(product);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ProductExists(product.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+                await _productService.UpdateProduct(product);
+
                 return RedirectToAction(nameof(Index));
             }
             return View(product);
         }
-
-        // GET: Products/Delete/5
+        [HttpGet]
+        [Authorize(Roles = $"{UserRoles.ROLE_ADMIN}")]
         public async Task<IActionResult> Delete(Guid? id)
         {
-            if (id == null || _context.Products == null)
+            var productId = id?.ToString();
+            if (productId == null)
             {
                 return NotFound();
             }
 
-            var product = await _context.Products
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (product == null)
-            {
-                return NotFound();
-            }
+            var product = await _productService.GetProductById(Guid.Parse(productId));
 
             return View(product);
         }
@@ -144,25 +138,12 @@ namespace basitsatinalimuyg.Controllers
         // POST: Products/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = $"{UserRoles.ROLE_ADMIN}")]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            if (_context.Products == null)
-            {
-                return Problem("Entity set 'AppDbContext.Products'  is null.");
-            }
-            var product = await _context.Products.FindAsync(id);
-            if (product != null)
-            {
-                _context.Products.Remove(product);
-            }
+            await _productService.DeleteProduct(id);
 
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool ProductExists(Guid id)
-        {
-            return (_context.Products?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

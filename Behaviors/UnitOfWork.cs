@@ -26,7 +26,7 @@ namespace basitsatinalimuyg.Behaviors
 		}
 		public async Task<int> SaveChangesAsync(CancellationToken cancellationToken)
 		{
-			
+
 			using var transaction = _dbContext.Database.BeginTransaction();
 			try
 			{

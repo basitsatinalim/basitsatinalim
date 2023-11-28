@@ -1,0 +1,30 @@
+﻿@model basitsatinalimuyg.Models.AddressViewModel
+
+<style>
+	.card-input-element {
+		display: none;
+	}
+
+	.card-input:hover {
+		cursor: pointer;
+		background-color: rgba(0, 0, 0, 0.1) !important;
+	}
+
+	.card-input-element:checked+.card-input {
+		border-color: #e86100;
+	}
+</style>
+
+
+<label class="w-100">
+	<input x-data type="radio" id=@Model.Id name="product" class="card-input-element"
+		x-on:change="$store.userPaymentInfo.handleRadioChange()" />
+	<div class="card card-default text-bg-light mt-4 card-input">
+		<div class="card-header">@Model.AddressTitle Home</div>
+		<div class="card-body">
+			<h5 class="card-title">@Model.Country - @Model.City</h5>
+			<p class="card-text">@Model.AddressLine</p>
+		</div>
+	</div>
+
+</label>

@@ -1,10 +1,100 @@
-﻿@model basitsatinalimuyg.Models.CartViewModel
-@{
-}
+﻿<div class="container py-5 h-100">
+	<div class="row d-flex justify-content-center align-items-center h-100">
+		<div class="col-12">
+			<div class="card card-registration card-registration-2" style="border-radius: 15px;">
+				<div class="card-body p-0">
+					<div x-cloak x-show="$store.userCart.items.length > 0" class="row g-0" x-data>
+						<div class="col-lg-8 d-flex row">
 
-<div x-data="{cartItems: $store.userCart.items}">
-	<template x-for="item in cartItems">
-		<partial name="Components/_CartCard" /> 
-	</template>
-</div>
+							<div class="p-5">
+								<div class="d-flex justify-content-between align-items-center">
+									<p class="mb-0 display-6">Shopping Cart</p>
+									<h6 class="mb-0 text-muted" x-text="`${$store.userCart.count} items`"></h6>
+								</div>
+								<hr class="my-4">
+								<div class="row mb-4 d-flex justify-content-between align-items-center">
+									<div x-data>
+										<template x-for="item in $store.userCart.items">
+											<partial name="Components/_CartCard" />
+										</template>
+									</div>
+								</div>
 
+							</div>
+							<div class="p-5">
+								<h6 class="mb-0">
+									<a asp-action="Index" asp-controller="Product" class="text-body">
+										<i class="fas fa-long-arrow-alt-left me-2"></i>Back to shop
+									</a>
+								</h6>
+							</div>
+						</div>
+						<div class="col-lg-4" style="border-left: 1px solid #bbb;">
+							<div class="p-5">
+								<div class="d-flex justify-content-between align-items-center">
+									<p class="mb-0 display-6">Order Summary</p>
+								</div>
+								<hr class="my-4">
+								<div class="row mb-4 d-flex justify-content-between align-items-center">
+									<div class="col-6">
+										<h6 class="mb-0">Subtotal</h6>
+									</div>
+									<div class="col-6 text-end">
+										<h6 class="mb-0" x-text="`${$store.userCart.total}₺`"></h6>
+									</div>
+								</div>
+								<div class="row mb-4 d-flex justify-content-between align-items-center">
+									<div class="col-6">
+										<h6 class="mb-0">Delivery</h6>
+									</div>
+									<div class="col-6 text-end">
+										<h6 class="mb-0">30₺</h6>
+									</div>
+								</div>
+								<div class="row mb-4 d-flex justify-content-between align-items-center">
+									<div class="col-6">
+										<h6 class="mb-0">Tax</h6>
+									</div>
+									<div class="col-6 text-end">
+										<h6 class="mb-0">No</h6>
+									</div>
+								</div>
+								<hr class="my-4">
+								<div class="row mb-4 d-flex justify-content-between align-items-center">
+									<div class="col-6">
+										<h6 class="mb-0">Total</h6>
+									</div>
+									<div class="col-6 text-end">
+										<h6 class="mb-0" x-text="`${parseFloat($store.userCart.total) + 30.00}₺`"></h6>
+									</div>
+								</div>
+								<div class="row mb-4 d-flex justify-content-between align-items-center">
+									<a class="btn w-100 btn-outline-dark  justify-content-center" asp-area="" asp-controller="Checkout"
+										asp-action="Index" title="Checkout">
+										Checkout
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div x-data x-cloak x-show="$store.userCart.items.length <= 0 || $store.userCart.items == undefined">
+						<div class="py-6 py-lg-12 m-5">
+							<div class="container">
+								<div class="row">
+									<div class="offset-lg-3 col-lg-6 col-md-12 col-12 text-center">
+										<img src="~/assets/bag.svg" alt="" class="img-fluid mb-4">
+										<h2>Your shopping cart is empty</h2>
+										<p class="mb-4">
+											Return to the store to add items for your delivery slot. Before proceed to checkout you must
+											add
+											some products to your shopping cart. You will find a lot of interesting products on our shop
+											page.
+										</p>
+										<a asp-action="Index" asp-controller="Product" class="btn btn-dark">Explore Products</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>

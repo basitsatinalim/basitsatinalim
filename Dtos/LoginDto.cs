@@ -10,7 +10,7 @@ namespace basitsatinalimuyg.Dtos
 		[MinLength(8)]
 		[MaxLength(50)]
 		[DataType(DataType.EmailAddress)]
-		[RegularExpression(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$")]
+		[RegularExpression(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$", ErrorMessage ="Invalid Email Address")]
 		public string? Email { get; set; }
 		[Required]
 		[DataType(DataType.Password)]

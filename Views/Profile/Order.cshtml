@@ -1,0 +1,153 @@
+@model basitsatinalimuyg.Models.OrdersViewModel
+@using basitsatinalimuyg.Services.Abstraction
+@using basitsatinalimuyg.Entities
+
+
+@{
+
+  var userName = Context.User.Claims.FirstOrDefault(x => x.Type == "FirstName")?.Value;
+
+
+
+  var productService = Context.RequestServices.GetService(typeof(IProductService)) as IProductService;
+
+
+  async Task<ProductViewModel?> GetOrderProduct(OrderLineItem orderLineItem)
+  {
+    return await productService?.GetProductById(orderLineItem.ProductId);
+  }
+
+}
+
+<style>
+  .cnt-shopping {
+    background-color: #4e3cc6;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .cnt-shopping:hover {
+    background-color: #3a2ba3;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+</style>
+
+
+<div class="container-lg p-5">
+
+  <div class="row">
+
+    <div class="col-3">
+      <partial name="Components/_ProfileSidebar" model=@userName />
+    </div>
+    <div class="col-9">
+      <section class="section_orders">
+        <div class="card w-100 mb-3" style="background-color: #f1ece2; ">
+          <div class="card-header display-6 flex-fill d-flex w-100 align-items-center"
+            style="border-bottom:none!important; height:80px">
+            Your Orders
+          </div>
+        </div>
+        <div class="card" style="background-color: #f1ece2">
+
+          <div class="card-body">
+            <div class="row">
+              <div class="col-12">
+
+                @foreach (var order in Model.Orders)
+                {
+
+                  <div class="card mb-3">
+                    <div class="card-header" style="background-color: #EEE6D6;">
+                      <div class="row">
+                        <div class="col">
+                          <div class="row">
+                            <span class="text-muted fw-bold" style="font-size:small;">Order Date</span>
+                          </div>
+                          <div class="row text-black" style="font-weight: 200;">
+                            <span class="text-muted">@order.Date</span>
+                          </div>
+                        </div>
+                        <div class="col">
+                          <div class="row">
+                            <span class="text-muted fw-bold" style="font-size:small;">Order Summary</span>
+                          </div>
+                          <div class="row text-black" style="font-weight: 200;">
+                            <span class="text-muted">@order.OrderLineItems.Count items</span>
+                          </div>
+                        </div>
+                        <div class="col">
+                          <div class="row">
+                            <span class="text-muted fw-bold" style="font-size:small;">Order Delivery</span>
+                          </div>
+                          <div class="row text-black" style="font-weight: 200;">
+                            <span class="text-muted">@order.User.Name</span>
+                          </div>
+                        </div>
+                        <div class="col">
+                          <div class="row">
+                            <span class="text-muted fw-bold" style="font-size:small;">Total Price</span>
+                          </div>
+                          <div class="row text-black" style="font-weight: 200; ">
+                            <span class="" style="color:#4e3cc6">@order.Total.Amount
+                              @order.Total.Currency</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="card-body" style="background-color: #EEE6D6;">
+                      <div class="card">
+                        <div class="card-body" style="background-color: #E9DFC9;">
+
+                          <div class="row d-flex align-items-center">
+                            <div class="col-3 lead text-muted">
+                              <img src="~/assets/success.png" alt="box" width="30" height="30">
+                              @order.Status
+                            </div>
+                            <div class="col-7">
+                              <div class="row">
+                                @foreach (var item in order.OrderLineItems)
+                                {
+                                  var product = await GetOrderProduct(item);
+                                  <a asp-action="Details" asp-route-id=@product.Id asp-controller="Product"
+                                    class="col-2 me-2 py-1 d-flex align-item-center justify-content-center mb-2"
+                                    style="background-color:#f1ece2; border-radius:8px; border:solid 1px #000">
+
+                                    <img src=@product.ImageUrl alt=@product.Name width="55" height="80"
+                                      style="background-color:#f1ece2; border-radius:8px;">
+
+                                  </a>
+                                }
+                              </div>
+                            </div>
+                            <div class="col-2 d-flex align-items-center justify-content-center">
+                              <a asp-action="Index" asp-controller="Home" type="button"
+                                class="btn cnt-shopping w-100"><span class="text-white"
+                                  style="font-weight: 300;">Details</span></a>
+
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+                }
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+  </div>
+
+</div>

@@ -1,5 +1,8 @@
-﻿using basitsatinalimuyg.Behaviors;
+﻿using AutoMapper;
+using basitsatinalimuyg.Behaviors;
+using basitsatinalimuyg.Config;
 using basitsatinalimuyg.Entities;
+using basitsatinalimuyg.Models;
 using basitsatinalimuyg.Repositories.Abstraction;
 using basitsatinalimuyg.Services.Abstraction;
 
@@ -7,15 +10,18 @@ namespace basitsatinalimuyg.Services
 {
 	public class UserService : IUserService
 	{
-
 		private readonly IUserRepository _userRepository;
+		private readonly IAdressRepository _adressRepository;
+		private readonly IMapper _mapper;
 		private readonly IUnitOfWork _unitOfWork;
 
 
-		public UserService(IUserRepository userRepository, IUnitOfWork unitOfWork)
+		public UserService(IUserRepository userRepository, IAdressRepository adressRepository, IUnitOfWork unitOfWork, IMapper mapper)
 		{
 			_userRepository = userRepository;
+			_adressRepository = adressRepository;
 			_unitOfWork = unitOfWork;
+			_mapper = mapper;
 		}
 
 
@@ -27,7 +33,7 @@ namespace basitsatinalimuyg.Services
 			return savedUser;
 		}
 
-		public Task DeleteUser(User user)
+		public Task<UserViewModel> DeleteUser(User user)
 		{
 			throw new NotImplementedException();
 		}
@@ -37,19 +43,43 @@ namespace basitsatinalimuyg.Services
 			throw new NotImplementedException();
 		}
 
-		public async Task<User?> GetUserByEmail(string? email)
+		public async Task<UserViewModel?> GetUserByEmail(string? email)
+		{
+			return _mapper.Map<UserViewModel>(await _userRepository.GetUserByEmail(email));
+		}
+
+		public async Task<ICollection<AddressViewModel>> GetUserAdresses(Guid id)
+		{
+			return _mapper.CastListObject<AddressViewModel, ICollection<Address>>(await _adressRepository.GetAllAsync(id));
+		}
+
+		public async Task<UserViewModel?> GetUserById(Guid id)
+		{
+			return _mapper.Map<UserViewModel>(await _userRepository.GetAsync(id));
+		}
+
+		public async Task<UserViewModel> UpdateUser(User user)
+		{
+			var updatedUser = _userRepository.Update(user);
+			await _unitOfWork.SaveChangesAsync();
+			return _mapper.Map<UserViewModel>(updatedUser);
+		}
+
+		public async Task<User?> GetUserByIdAsEntity(Guid id)
+		{
+			var user = await _userRepository.GetAsync(id);
+
+			return user;
+		}
+
+		public async Task<Address?>? GetAddressByIdAsEntity(Guid id)
+		{
+			return await _adressRepository.GetAsync(id);
+		}
+
+		public async Task<User?> GetUserByEmailAsEntity(string? email)
 		{
 			return await _userRepository.GetUserByEmail(email);
-		}
-
-		public Task<User?> GetUserById(Guid id)
-		{
-			throw new NotImplementedException();
-		}
-
-		public Task UpdateUser(User user)
-		{
-			throw new NotImplementedException();
 		}
 	}
 }

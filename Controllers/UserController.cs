@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using basitsatinalimuyg.Config;
 using basitsatinalimuyg.Constants;
+using basitsatinalimuyg.Dtos;
 using basitsatinalimuyg.Entities;
 using basitsatinalimuyg.Models;
 using basitsatinalimuyg.Services.Abstraction;
@@ -22,13 +23,51 @@ namespace basitsatinalimuyg.Controllers
 		}
 
 		[HttpGet]
-		[Authorize(Roles = $"{UserRoles.ROLE_USER}")]
+		[Authorize(Roles = $"{UserRoles.ROLE_ADMIN}")]
 		public async Task<IActionResult> Index()
 		{
 
 			var users = await _userService.GetAllUsers();
 
 			return View(_mapper.CastListObject<UserViewModel, ICollection<User?>>(users));
+		}
+
+		[HttpGet]
+		public async Task<IActionResult> Details(Guid id)
+		{
+			var user = await _userService.GetUserById(id);
+
+			if (user == null)
+			{
+				return NotFound();
+			}
+
+			return View(_mapper.Map<UserViewModel>(user));
+		}
+
+		[HttpPost]
+
+		public async Task<IActionResult> Update(UserDto userDto)
+		{
+			var user = await _userService.GetUserByEmailAsEntity(userDto.Email);
+
+			if (user == null)
+			{
+				return NotFound();
+			}
+
+			user.Name = userDto.Name ?? user.Name;
+			user.Surname = userDto.Surname ?? user.Surname;
+			user.Email = userDto.Email ?? user.Email;
+			user.Phone = userDto.Phone ?? user.Phone;
+			user.ImageUrl = userDto.ImageUrl ?? user.ImageUrl;
+			user.Gender = userDto.Gender;
+			user.BirthDate = userDto.BirthDate ?? user.BirthDate;
+			user.UpdatedAt = DateTime.Now;
+
+			await _userService.UpdateUser(user);
+
+			return RedirectToAction("Index", "Profile");
 		}
 
 	}

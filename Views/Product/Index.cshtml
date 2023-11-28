@@ -1,17 +1,41 @@
 ﻿@model IEnumerable<basitsatinalimuyg.Models.ProductViewModel>
-
+@using basitsatinalimuyg.Constants;
 @{
 	ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<p class="display-5">Products</p>
 
-<p>
-	<a asp-action="Create">Create New</a>
-</p>
+<hr class="my-4" />
 
-<div class="container py-5">
-	<div class="row">
+<div class="container-lg row">
+	<div class="col-xl-2">
+		<p class="blockquote">Categories</p>
+		<hr />
+		<ul class="list-group">
+			@foreach (var category in Enum.GetValues<CategoryEnum>())
+			{
+				if (Context.Request.Query["category"] == category.ToString())
+				{
+					<a class="text-white lead list-group-item list-group-item-action active" style="text-decoration:none"
+						asp-action="Index" asp-route-category=@category>
+						@category
+					</a>
+					continue;
+				}
+				<a class="text-muted lead list-group-item list-group-item-action" style="text-decoration:none" asp-action="Index"
+					asp-route-category=@category>
+					@category
+				</a>
+			}
+			<a class="text-dark lead list-group-item list-group-item-action my-5"
+				style="text-decoration:none; border-top:1px solid rgba(0,0,0,.125)" asp-action="Index">
+				Remove filter
+			</a>
+		</ul>
+	</div>
+
+	<div class="col-xl-10 row mt-5">
 		@foreach (var item in Model)
 		{
 			<partial name="Components/_ProductCard" model=@item />

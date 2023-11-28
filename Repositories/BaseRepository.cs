@@ -27,9 +27,9 @@ namespace basitsatinalimuyg.Repositories
 			return entity;
 		}
 
-		public async Task<T?> GetAsync(T entity)
+		public async Task<T?> GetAsync(Guid id)
 		{
-			return await _appDbContext.Set<T>().FirstOrDefaultAsync(x => x.Id == entity.Id);
+			return await _appDbContext.Set<T>().FirstOrDefaultAsync(x => x.Id == id);
 		}
 
 		public async Task<T[]> GetAllAsync()
@@ -41,6 +41,7 @@ namespace basitsatinalimuyg.Repositories
 		public T? Update(T entity)
 		{
 			_appDbContext.Set<T>().Update(entity);
+			_appDbContext.Entry(entity).State = EntityState.Modified;
 			return entity;
 		}
 
