@@ -5,7 +5,7 @@ using System.Text.Json;
 
 namespace basitsatinalimuyg.Utils
 {
-    public static class ModelBuilderExtensions
+	public static class ModelBuilderExtensions
 	{
 		public static void ApplyMoneyValueConverter(this ModelBuilder modelBuilder)
 		{
@@ -22,7 +22,27 @@ namespace basitsatinalimuyg.Utils
 					var propertyBuilder = entityBuilder.Property(property.PropertyType, property.Name);
 
 					propertyBuilder.HasConversion(new MoneyValueConverter())
-								   .HasColumnType("jsonb");
+									 .HasColumnType("jsonb");
+				}
+			}
+		}
+
+		public static void ApplyPaymentValueConverter(this ModelBuilder modelBuilder)
+		{
+			var entityTypeList = modelBuilder.Model.GetEntityTypes().ToList();
+
+			foreach (var entityType in entityTypeList)
+			{
+				var properties = entityType.ClrType.GetProperties()
+					.Where(p => p.PropertyType == typeof(Payment));
+
+				foreach (var property in properties)
+				{
+					var entityBuilder = modelBuilder.Entity(entityType.ClrType);
+					var propertyBuilder = entityBuilder.Property(property.PropertyType, property.Name);
+
+					propertyBuilder.HasConversion(new PaymentConverter())
+									 .HasColumnType("jsonb");
 				}
 			}
 		}
@@ -52,7 +72,36 @@ namespace basitsatinalimuyg.Utils
 			return JsonSerializer.Deserialize<Money>(value, new JsonSerializerOptions
 			{
 				PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-			}) ?? new Money(10, CurrencyEnum.USD);
+			}) ?? new Money(10, CurrencyEnum.TRY);
+		}
+	}
+
+
+	public class PaymentConverter : ValueConverter<Payment, string>
+	{
+		private static readonly JsonSerializerOptions _jsonOptions = new()
+		{
+			PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+			WriteIndented = false
+		};
+
+		public PaymentConverter() : base(
+			v => ConvertToString(v),
+			v => ConvertToPayment(v))
+		{
+		}
+
+		private static string ConvertToString(Payment value)
+		{
+			return JsonSerializer.Serialize(value, _jsonOptions);
+		}
+
+		private static Payment ConvertToPayment(string value)
+		{
+			return JsonSerializer.Deserialize<Payment>(value, new JsonSerializerOptions
+			{
+				PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+			}) ?? new Payment("1111", "ABC", "12/99", "123");
 		}
 	}
 }

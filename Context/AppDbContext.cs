@@ -11,6 +11,7 @@ namespace basitsatinalimuyg.Context
         public DbSet<User> Users { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderLineItem> OrderLineItems { get; set; }
+        public DbSet<Address> Addresses { get; set; }
 
 
         protected readonly IConfiguration Configuration;
@@ -23,8 +24,8 @@ namespace basitsatinalimuyg.Context
         protected override void OnConfiguring(DbContextOptionsBuilder options)
         {
             options.UseNpgsql(Configuration.GetConnectionString("basicecomm"));
-			AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
-		}
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -32,9 +33,9 @@ namespace basitsatinalimuyg.Context
 
             // order and orderlineitem relationship
             modelBuilder.Entity<OrderLineItem>()
-				.HasOne(s => s.Order)
-				.WithMany(g => g.Orders)
-				.HasForeignKey(s => s.OrderId);
+                .HasOne(s => s.Order)
+                .WithMany(g => g.OrderLineItems)
+                .HasForeignKey(s => s.OrderId);
 
             // orderlineitem and product relationship
             modelBuilder.Entity<OrderLineItem>()
@@ -42,15 +43,20 @@ namespace basitsatinalimuyg.Context
                 .WithMany(g => g.OrderLineItems)
                 .HasForeignKey(s => s.ProductId);
 
-            // order and user relationship
-			modelBuilder.Entity<Order>()
-                .HasOne(s => s.User)
-                .WithMany(g => g.Orders)
-                .HasForeignKey(s => s.UserId);
 
-			modelBuilder.ApplyMoneyValueConverter();
+            modelBuilder.ApplyPaymentValueConverter();
 
-		}
+            modelBuilder.ApplyMoneyValueConverter();
+
+            // user and adress relationship
+            modelBuilder.Entity<User>()
+                .HasMany(u => u.Addresses)
+                .WithOne(a => a.User)
+                .HasForeignKey(a => a.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+
+        }
 
 
     }

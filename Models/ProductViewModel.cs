@@ -1,9 +1,8 @@
-﻿using basitsatinalimuyg.Entities;
-using basitsatinalimuyg.Constants;
+﻿using basitsatinalimuyg.Constants;
 
 namespace basitsatinalimuyg.Models
 {
-    public class ProductViewModel: BaseViewModel
+	public class ProductViewModel : BaseViewModel
 	{
 		public string? Name { get; set; }
 		public string? Description { get; set; }

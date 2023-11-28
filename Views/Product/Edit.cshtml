@@ -1,4 +1,5 @@
-﻿@model basitsatinalimuyg.Entities.Product
+﻿@model basitsatinalimuyg.Models.ProductViewModel
+@using basitsatinalimuyg.Constants
 
 @{
     ViewData["Title"] = "Edit";
@@ -10,57 +11,132 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
+        <form asp-action="Edit" class="row g-3 needs-validation" method="post" novalidate>
+            <div class="col-md-6">
+                <div class="input-group has-validation ">
+                    <span class="input-group-text" id="name"><i class="fa-solid fa-tag"></i></span>
+                    <div class="form-floating flex-fill">
+                        <input style="outline: none !important; box-shadow: none;" asp-for="Name" placeholder="Name"
+                            type="text" class="form-control" id="name" required>
+                        <label for="name">Name</label>
+                    </div>
+                    <div class="invalid-feedback">
+                        Name is required.
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
+            <div class="col-md-6">
+                <div class="input-group has-validation">
+
+                    <span class="input-group-text" id="category"><i class="fa-solid fa-list-check"></i></span>
+                    <div class="form-floating flex-fill">
+                        <select asp-for="Category" class="form-select" id="category" name="category" required selected
+                            style="outline: none !important; box-shadow: none;">
+                            @foreach (var category in Enum.GetNames<CategoryEnum>().Select((value, index) => (value,
+                            index)))
+                            {
+                                <option value="@category.index">@category.value</option>
+                            }
+                        </select>
+                        <label for="category">Category</label>
+                    </div>
+                    <div class="invalid-feedback">
+                        Category is required field.
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Price" class="control-label"></label>
-                <input asp-for="Price" class="form-control" />
-                <span asp-validation-for="Price" class="text-danger"></span>
+            <div class="input-group has-validation col-md-12">
+
+                <span class="input-group-text" id="description"><i class="fa-solid fa-quote-left"></i></span>
+                <div class="form-floating flex-fill">
+                    <textarea asp-for="Description" placeholder="Description" class="form-control" id="description"
+                        style="height:100px; outline: none !important; box-shadow: none;">
+                        </textarea>
+                    <label for="description">Description</label>
+                </div>
+                <div class="invalid-feedback">
+                    Please enter the description.
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="ImageUrl" class="control-label"></label>
-                <input asp-for="ImageUrl" class="form-control" />
-                <span asp-validation-for="ImageUrl" class="text-danger"></span>
+            <div class="col-md-4">
+
+                <div class="input-group has-validation">
+                    <span class="input-group-text" id="amount">
+                        <i class="fa-solid fa-coins"></i>
+                    </span>
+                    <div class="form-floating flex-fill">
+
+                        <input style="outline: none !important; box-shadow: none;" name="amount" placeholder="Amount"
+                            type="number" step=".01" asp-for="@Model.Price.Amount" min="0" pattern="^\d+(?:\.\d{1,2})?$"
+                            class="form-control" id="amount" required>
+                        <label for="amount">Amount</label>
+                    </div>
+                    <div class="invalid-feedback">
+                        Amount field is required.
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Category" class="control-label"></label>
-                <input asp-for="Category" class="form-control" />
-                <span asp-validation-for="Category" class="text-danger"></span>
+            <div class="col-md-4">
+                <div class="input-group has-validation">
+                    <span class="input-group-text" id="currency"><i class="fa-solid fa-hand-holding-dollar"></i></span>
+                    <div class="form-floating flex-fill">
+                        <select name="currency" class="form-select" id="currency" name="Currency" required selected
+                            style="outline: none !important; box-shadow: none;">
+                            @foreach (var currency in Enum.GetNames<CurrencyEnum>().Select((value, index) => (value,
+                            index)))
+                            {
+                                <option value="@currency.index">@currency.value</option>
+                            }
+                        </select>
+                        <label for="currency">Currency</label>
+                    </div>
+                    <div class="invalid-feedback">
+                        Currency is required field.
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Stock" class="control-label"></label>
-                <input asp-for="Stock" class="form-control" />
-                <span asp-validation-for="Stock" class="text-danger"></span>
+
+            <div class="col-md-4">
+
+                <div class="input-group has-validation">
+                    <span class="input-group-text" id="stock">
+                        <i class="fa-solid fa-cubes-stacked"></i>
+                    </span>
+                    <div class="form-floating flex-fill">
+                        <input style="outline: none !important; box-shadow: none;" asp-for="Stock" placeholder="Stock"
+                            type="number" step="1" min="0" class="form-control" id="stock" required>
+                        <label for="stock">Stock</label>
+                    </div>
+                    <div class="invalid-feedback">
+                        You need to provide the stock.
+                    </div>
+                </div>
             </div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="CreatedAt" class="control-label"></label>
-                <input asp-for="CreatedAt" class="form-control" />
-                <span asp-validation-for="CreatedAt" class="text-danger"></span>
+            <div class="col-md-12">
+
+                <div class="input-group has-validation">
+                    <span class="input-group-text" id="imgurl">
+                        <i class="fa-solid fa-image"></i>
+                    </span>
+                    <div class="form-floating flex-fill">
+
+                        <input style="outline: none !important; box-shadow: none;" asp-for="ImageUrl"
+                            placeholder="ImageUrl" type="text" class="form-control" id="imgurl" required>
+                        <label for="imgurl">Image Url</label>
+                    </div>
+                    <div class="invalid-feedback">
+                        Please enter a image url.
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="UpdatedAt" class="control-label"></label>
-                <input asp-for="UpdatedAt" class="form-control" />
-                <span asp-validation-for="UpdatedAt" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+            <div class="col-12">
+                <button class="btn btn-primary" type="submit">Submit form</button>
             </div>
         </form>
+
     </div>
 </div>
 
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
-

@@ -4,10 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using basitsatinalimuyg.Dtos;
 using basitsatinalimuyg.Services.Abstraction;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using basitsatinalimuyg.Constants;
 using basitsatinalimuyg.Utils;
-using Microsoft.AspNetCore.Authorization;
 
 namespace basitsatinalimuyg.Controllers
 {
@@ -26,14 +24,14 @@ namespace basitsatinalimuyg.Controllers
 		[HttpGet]
 		public IActionResult Login()
 		{
+			if (User?.Identity?.IsAuthenticated ?? false) return RedirectToAction("Index", "Home");
 			return View();
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> Login([Bind("Email,Password,RememberMe")] LoginDto login, [FromQuery(Name = "RedirectUrl")] string? redirectUrl)
+		public async Task<IActionResult> Login([Bind("Email,Password,RememberMe")] LoginDto login, [FromQuery(Name = "redirectUrl")] string? redirectUrl)
 		{
-
-
+			if (User?.Identity?.IsAuthenticated ?? false) return RedirectToAction("Index", "Home");
 			if (ModelState.IsValid)
 			{
 
@@ -47,9 +45,12 @@ namespace basitsatinalimuyg.Controllers
 
 				var claims = new List<Claim>
 				{
-					new Claim(ClaimTypes.Name, user.Email!),
-					new Claim(ClaimTypes.Role, user.Role.GetName() ?? UserRoleEnum.ROLE_USER.GetName()!),
-					new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
+					new(ClaimTypes.Name, user.Id.ToString()),
+					new(ClaimTypes.Role, user.Role.GetName() ?? UserRoleEnum.ROLE_USER.GetName()!),
+					new(ClaimTypes.NameIdentifier, user.Email!),
+					new(ClaimTypes.DateOfBirth, user.BirthDate.ToString()!),
+					new("FirstName", user.Name!),
+
 				};
 
 				var claimsIdentity = new ClaimsIdentity(
@@ -69,8 +70,6 @@ namespace basitsatinalimuyg.Controllers
 					new ClaimsPrincipal(claimsIdentity),
 					authProperties);
 
-				_logger.LogInformation("User {Email} logged in at {Time}.",
-					user.Email, DateTime.UtcNow);
 
 				if (redirectUrl != null) return Redirect(redirectUrl);
 
@@ -83,13 +82,10 @@ namespace basitsatinalimuyg.Controllers
 		[HttpGet]
 		public async Task<IActionResult> Logout()
 		{
-			if (!User.Identity.IsAuthenticated) return RedirectToAction("Index", "Home");
+			if (!User?.Identity?.IsAuthenticated ?? false) return RedirectToAction("Index", "Home");
 
 			await HttpContext.SignOutAsync(
 									CookieAuthenticationDefaults.AuthenticationScheme);
-
-			_logger.LogInformation("User {Email} logged out at {Time}.",
-									User.Identity!.Name, DateTime.UtcNow);
 
 			return RedirectToAction("Index", "Home");
 
@@ -99,17 +95,17 @@ namespace basitsatinalimuyg.Controllers
 		[HttpGet]
 		public IActionResult Register()
 		{
+			if (User?.Identity?.IsAuthenticated ?? false) return RedirectToAction("Index", "Home");
 			return View();
 		}
 
 		[HttpPost]
 		public async Task<IActionResult> Register(RegisterDto register)
 		{
-			if (User.Identity.IsAuthenticated) return RedirectToAction("Index", "Home");
+			if (User?.Identity?.IsAuthenticated ?? false) return RedirectToAction("Index", "Home");
 
 			if (ModelState.IsValid)
 			{
-				Console.WriteLine("valid");	
 				var user = await _authService.Register(register);
 
 				if (user == null)

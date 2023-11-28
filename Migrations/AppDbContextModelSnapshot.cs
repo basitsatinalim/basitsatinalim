@@ -22,6 +22,49 @@ namespace basitsatinalimuyg.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("basitsatinalimuyg.Entities.Address", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("AddressLine")
+                        .HasColumnType("text");
+
+                    b.Property<string>("AddressTitle")
+                        .HasColumnType("text");
+
+                    b.Property<string>("City")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Country")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("PostalCode")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<byte[]>("Version")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("bytea");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Addresses");
+                });
+
             modelBuilder.Entity("basitsatinalimuyg.Entities.Order", b =>
                 {
                     b.Property<Guid>("Id")
@@ -34,8 +77,11 @@ namespace basitsatinalimuyg.Migrations
                     b.Property<DateTime?>("Date")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<string>("Note")
-                        .HasColumnType("text");
+                    b.Property<string>("Payment")
+                        .HasColumnType("jsonb");
+
+                    b.Property<Guid?>("ShippingAddressId")
+                        .HasColumnType("uuid");
 
                     b.Property<int?>("Status")
                         .HasColumnType("integer");
@@ -48,6 +94,12 @@ namespace basitsatinalimuyg.Migrations
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
+
+                    b.Property<byte[]>("Version")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("bytea");
 
                     b.HasKey("Id");
 
@@ -62,17 +114,32 @@ namespace basitsatinalimuyg.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<int?>("Category")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Count")
+                        .HasColumnType("integer");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid>("OrderId")
                         .HasColumnType("uuid");
 
+                    b.Property<string>("Price")
+                        .HasColumnType("jsonb");
+
                     b.Property<Guid>("ProductId")
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp without time zone");
+
+                    b.Property<byte[]>("Version")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("bytea");
 
                     b.HasKey("Id");
 
@@ -113,6 +180,12 @@ namespace basitsatinalimuyg.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp without time zone");
 
+                    b.Property<byte[]>("Version")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("bytea");
+
                     b.HasKey("Id");
 
                     b.ToTable("Products");
@@ -124,23 +197,17 @@ namespace basitsatinalimuyg.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<string>("Address")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime?>("BirthDay")
+                    b.Property<DateTime?>("BirthDate")
                         .HasColumnType("timestamp without time zone");
-
-                    b.Property<string>("City")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Country")
-                        .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Email")
                         .HasColumnType("text");
+
+                    b.Property<bool>("Gender")
+                        .HasColumnType("boolean");
 
                     b.Property<string>("ImageUrl")
                         .HasColumnType("text");
@@ -154,9 +221,6 @@ namespace basitsatinalimuyg.Migrations
                     b.Property<string>("Phone")
                         .HasColumnType("text");
 
-                    b.Property<string>("PostalCode")
-                        .HasColumnType("text");
-
                     b.Property<int>("Role")
                         .HasColumnType("integer");
 
@@ -166,9 +230,25 @@ namespace basitsatinalimuyg.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp without time zone");
 
+                    b.Property<byte[]>("Version")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("bytea");
+
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("basitsatinalimuyg.Entities.Address", b =>
+                {
+                    b.HasOne("basitsatinalimuyg.Entities.User", "User")
+                        .WithMany("Addresses")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("basitsatinalimuyg.Entities.Order", b =>
@@ -185,7 +265,7 @@ namespace basitsatinalimuyg.Migrations
             modelBuilder.Entity("basitsatinalimuyg.Entities.OrderLineItem", b =>
                 {
                     b.HasOne("basitsatinalimuyg.Entities.Order", "Order")
-                        .WithMany("Orders")
+                        .WithMany("OrderLineItems")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -203,7 +283,7 @@ namespace basitsatinalimuyg.Migrations
 
             modelBuilder.Entity("basitsatinalimuyg.Entities.Order", b =>
                 {
-                    b.Navigation("Orders");
+                    b.Navigation("OrderLineItems");
                 });
 
             modelBuilder.Entity("basitsatinalimuyg.Entities.Product", b =>
@@ -213,6 +293,8 @@ namespace basitsatinalimuyg.Migrations
 
             modelBuilder.Entity("basitsatinalimuyg.Entities.User", b =>
                 {
+                    b.Navigation("Addresses");
+
                     b.Navigation("Orders");
                 });
 #pragma warning restore 612, 618

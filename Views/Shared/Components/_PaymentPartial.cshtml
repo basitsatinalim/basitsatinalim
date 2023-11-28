@@ -1,0 +1,163 @@
+@{
+}
+
+<div class="container">
+  <div class="row d-flex justify-content-center p-5">
+    <div class="col">
+      <div class="card gradient-custom" style="border-radius: 15px;">
+        <div class="card-body p-4">
+          <form class="needs-validation" novalidate>
+            <div class="container">
+              <div class="row mb-4">
+                <div class="col-9">
+                  <div class="input-group has-validation ">
+                    <span class="input-group-text" id="cardNumber">
+                      <i class="fa-regular fa-credit-card" style="color: #000000;"></i>
+                    </span>
+                    <div class="form-floating flex-fill">
+                      <input style="outline: none !important; box-shadow: none;" name="cardNumber"
+                        placeholder="1234 5678 9012 3457" type="text" class="form-control" onkeyup="formatCreditCard()"
+                        onkeypress="allowNumbersAndSpaces(event)" id="cardNumber" minlength="19" maxlength="19"
+                        pattern="^\d{4}\s\d{4}\s\d{4}\s\d{4}$" required>
+
+                      <label for="cardNumber">Card Number <span class="text-muted blockquote-footer">1234 5678 9*** ****
+                        </span></label>
+                    </div>
+                    <div class="invalid-feedback">
+                      Card Number is required.
+                    </div>
+                  </div>
+                </div>
+                <div class="col align-items-center d-flex">
+                  <img src="https://img.icons8.com/?size=35&id=13608&format=png" alt="visa" width="35px" />
+                  <img src="https://img.icons8.com/?size=35&id=13610&format=png" alt="mastercard" width="35px" />
+                  <img src="https://troyodeme.com/Content/Icons/logo-dark.png" alt="troy" width="35px" />
+                </div>
+              </div>
+
+              <div class="row mb-4">
+                <div class="input-group has-validation ">
+                  <span class="input-group-text" id="holderName">
+                    <i class="fa-solid fa-signature" style="color: #000000;"></i>
+                  </span>
+                  <div class="form-floating flex-fill">
+                    <input style="outline: none !important; box-shadow: none;" placeholder="Card Holder's Name"
+                      type="text" class="form-control" id="holderName" name="holderName" required>
+                    <label for="holderName">Card Holder's Name</label>
+                  </div>
+                  <div class="invalid-feedback">
+                    Card Holder's Name is required.
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col">
+                  <div class="input-group has-validation ">
+                    <span class="input-group-text" id="expirationDate">
+                      <i class="fa-solid fa-calendar-days" style="color: #000000;"></i>
+                    </span>
+                    <div class="form-floating flex-fill">
+                      <input style="outline: none !important; box-shadow: none;" placeholder="MM/YY" type="text"
+                        pattern="^(0[1-9]|1[0-2])\/?([0-9]{4}|[0-9]{2})$" class="form-control" id="expirationDate"
+                        name="expirationDate" maxlength="5" required>
+                      <label for="expirationDate">Expiration Date <span class="text-muted blockquote-footer">
+                          MM/YY
+                        </span></label>
+                    </div>
+                    <div class="invalid-feedback">
+                      Expiration Date is required.
+                    </div>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="input-group has-validation ">
+                    <span class="input-group-text" id="cvv">
+                      <img src="https://img.icons8.com/?size=24&id=22919&format=png" width="22" />
+                    </span>
+                    <div class="form-floating flex-fill">
+                      <input style="outline: none !important; box-shadow: none;" placeholder="&#9679;&#9679;&#9679;"
+                        type="text" class="form-control" id="cvv" name="cvv" minlength="3" maxlength="3" required>
+                      <label for="cvv">CVV <span class="text-muted blockquote-footer">123</span></label>
+                    </div>
+                    <div class="invalid-feedback">
+                      CVV is required.
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function allowNumbersAndSpaces(event) {
+
+    if (event.target.name === "cvv") {
+      const charCode = event.keyCode;
+      if ((charCode < 48 || charCode > 57) && charCode !== 8 || charCode === 32) {
+        event.preventDefault();
+        return
+      }
+    }
+    const charCode = event.which ? event.which : event.keyCode;
+    if ((charCode < 48 || charCode > 57) && charCode !== 32 && charCode !== 8) {
+      event.preventDefault();
+      return
+    }
+  }
+
+  function formatCreditCard() {
+    const input = document.getElementsByName('cardNumber')[0];
+    let value = input.value.replace(/\s/g, '');
+    let formattedValue = '';
+
+    for (let i = 0; i < value.length; i++) {
+      if (i > 0 && i % 4 === 0) {
+        formattedValue += ' ';
+      }
+      formattedValue += value[i];
+    }
+
+    input.value = formattedValue;
+  }
+
+
+  document.getElementsByName('cardNumber')[0].addEventListener('input', function (e) {
+    formatCreditCard();
+    Alpine.store('userPaymentInfo').handleInputChange(e);
+  });
+
+  document.getElementsByName('cardNumber')[0].addEventListener('keypress', allowNumbersAndSpaces);
+
+  document.getElementsByName('holderName')[0].addEventListener('input', function (e) {
+    e.target.value = e.target.value.toUpperCase();
+    Alpine.store('userPaymentInfo').handleInputChange(e);
+  });
+
+  document.getElementsByName('expirationDate')[0].addEventListener('input', function (e) {
+    const value = e.target.value.replace(/\s/g, '');
+    let formattedValue = '';
+
+    for (let i = 0; i < value.length; i++) {
+      if (i > 0 && i % 2 === 0 && i < 4 && value[i] !== '/') {
+        formattedValue += '/';
+      }
+      formattedValue += value[i];
+    }
+
+    e.target.value = formattedValue;
+    Alpine.store('userPaymentInfo').handleInputChange(e);
+  });
+
+  document.getElementsByName('cvv')[0].addEventListener('keypress', allowNumbersAndSpaces);
+
+  document.getElementsByName('cvv')[0].addEventListener('input', function (e) {
+    Alpine.store('userPaymentInfo').handleInputChange(e);
+  });
+
+
+</script>

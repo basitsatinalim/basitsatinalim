@@ -1,86 +1,50 @@
-﻿@model basitsatinalimuyg.Models.CartViewModel
-@using basitsatinalimuyg.Constants;
+﻿@using basitsatinalimuyg.Constants;
 
 @{
 }
 
-<div class="row justify-content-center mb-3">
-	<div class="col-md-12 col-xl-10">
-		<div class="card shadow-0 border rounded-3">
-			<div class="card-body">
-				<div class="row">
-					<div class="col-md-12 col-lg-3 col-xl-3 mb-4 mb-lg-0">
-						<div class="bg-image hover-zoom ripple rounded ripple-surface">
-							<img :src="item.imageUrl"
-								 class="w-100" />
-							<a href="#!">
-								<div class="hover-overlay">
-									<div class="mask" style="background-color: rgba(253, 253, 253, 0.15);"></div>
-								</div>
-							</a>
-						</div>
-					</div>
-					<div class="col-md-6 col-lg-6 col-xl-6">
-						<h5 class="mb-4" x-text="item.name"></h5>
-						@* 						<div class="d-flex flex-row">
-						<div class="text-danger mb-1 me-2">
-						<i class="fa fa-star"></i>
-						<i class="fa fa-star"></i>
-						<i class="fa fa-star"></i>
-						<i class="fa fa-star"></i>
-						</div>
-						<span>310</span>
-						</div> *@
-						<div class="mt-1 mb-0 text-muted small">
-							<span>100% cotton</span>
-							<span class="text-primary"> • </span>
-							<span>Light weight</span>
-							<span class="text-primary"> • </span>
-							<span>Best finish<br /></span>
-						</div>
-						<p x-text="item.description" class=" mb-4 mb-md-0">
-							There are many variations of passages of Lorem Ipsum available, but the
-							majority have suffered alteration in some form, by injected humour, or
-							randomised words which don't look even slightly believable.
-						</p>
-					</div>
-					<div class="col-md-6 col-lg-3 col-xl-3 border-sm-start-none border-start">
-						<div class="d-flex flex-row align-items-center mb-1">
-
-							<template x-if="item.currency === 0">
-								<h4 x-text="'₺'+item.amount" class="mb-1 me-1"></h4>
-							</template>
-							<template x-if="item.currency === 1">
-								<h4 x-text="'$'+item.amount" class="mb-1 me-1"></h4>
-							</template>
-							<template x-if="item.currency === 2">
-								<h4 x-text="'€'+item.amount" class="mb-1 me-1"></h4>
-							</template>
-						</div>
-						<h6 class="text-success">Free shipping</h6>
-						<div class="d-flex flex-column mt-4">
-							<button class="btn btn-primary btn-sm" type="button">Details</button>
-							<button class="btn btn-outline-primary btn-sm mt-2 mb-4" type="button">
-								Add to wishlist
-							</button>
-							<div class="input-group">
-								<span class="input-group-prepend">
-									<button type="button" class="btn btn-outline-secondary btn-number" data-type="minus">
-										<i class="fa fa-minus"></i>
-									</button>
-								</span>
-								<input class="form-control form-control-sm" type="number" :value="item.count" min="1" style="">
-								<span class="input-group-append">
-									<button type="button" class="btn btn-outline-secondary btn-number position-relative" data-type="plus" style="border-radius:50%;">
-										<i class="fa fa-plus"></i>
-									</button>
-								</span>
-							</div>
-
-						</div>
-					</div>
-				</div>
-			</div>
+<div class="row mb-4 d-flex justify-content-between align-items-center" x-cloak
+	x-data="{_:$store.userCart.getData(item.id)}">
+	<div x-show="$store[item.id]===undefined">
+		<div class="spinner-grow" role="status">
+			<span class="visually-hidden">Loading...</span>
 		</div>
 	</div>
+	<template x-cloack x-if="$store[item.id]">
+		<div class="row mb-4 d-flex justify-content-between align-items-center">
+
+			<img :src="$store[item.id].imageUrl" class="img-fluid" :alt="$store[item.id].name"
+				style="width: 150px; height: 150px; object-fit: cover;" />
+			<div class="col-md-3 col-lg-3 col-xl-4">
+				<p class="text-black mb-0" x-text="$store[item.id].name"></p>
+
+				<span class="text-muted" style="font-size:13px;" x-text="item.category"></span>
+			</div>
+			<div class="col-md-3 col-lg-3 col-xl-2 d-flex">
+				<button class="btn btn-link px-2" x-on:click="$store.userCart.decreaseItem(item.id)"
+					:disabled="$store.userCart.itemCount(item.id).count === 1"
+					style="outline: none !important; box-shadow: none;">
+					<i class="fas fa-minus" style="color:#000;"></i>
+				</button>
+				<input id="form1" min="1" name="quantity" step="1" x-model="$store.userCart.itemCount(item.id).count"
+					type="number" class="form-control form-control-sm" />
+				<button class="btn btn-link px-2" x-on:click="$store.userCart.increaseItem(item.id)"
+					style="outline: none !important; box-shadow: none;">
+					<i class="fas fa-plus" style="color:#000;"></i>
+				</button>
+			</div>
+			<div class="col-md-3 col-lg-2 col-xl-2 text-center">
+				<h6 x-text="$store[item.id].price.amount+'₺'" class="mb-0"></h6>
+			</div>
+			<div class="col-md-1 col-lg-1 col-xl-1 text-end">
+				<button x-on:click="$store.userCart.remove(item.id)" class="btn btn-outline-dark"
+					style="outline: none !important; box-shadow: none;">
+					<i class="fa-solid fa-trash"></i>
+				</button>
+			</div>
+		</div>
+	</template>
+</div>
+<div class="text-success">
+	<hr>
 </div>

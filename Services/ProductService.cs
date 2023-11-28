@@ -1,7 +1,10 @@
 ﻿using AutoMapper;
 using basitsatinalimuyg.Behaviors;
+using basitsatinalimuyg.Config;
+using basitsatinalimuyg.Constants;
 using basitsatinalimuyg.Dtos;
 using basitsatinalimuyg.Entities;
+using basitsatinalimuyg.Models;
 using basitsatinalimuyg.Repositories.Abstraction;
 using basitsatinalimuyg.Services.Abstraction;
 
@@ -21,41 +24,82 @@ namespace basitsatinalimuyg.Services
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<Product?> CreateProduct(ProductDto newProduct)
+        public async Task<ProductViewModel> CreateProduct(ProductDto newProduct)
         {
             var productEntity = _mapper.Map<Product>(newProduct);
 
-            Console.WriteLine(productEntity);
-
-            var product =  await _productRepository.AddAsync(productEntity);
+            var product = await _productRepository.AddAsync(productEntity);
 
             await _unitOfWork.SaveChangesAsync();
 
-            return product;
+            return _mapper.Map<ProductViewModel>(product);
 
         }
 
-        public Task DeleteProduct(Product product)
+        public async Task DeleteProduct(Guid id)
         {
-            throw new NotImplementedException();
+            var product = await _productRepository.GetAsync(id) ?? throw new Exception("Product not found");
+
+            _productRepository.Delete(product);
+
+            await _unitOfWork.SaveChangesAsync();
+
         }
 
-        public async Task<ICollection<Product>> GetAllProducts()
+        public async Task<ICollection<ProductViewModel>> GetAllProducts()
         {
             var products = await _productRepository.GetAllAsync();
 
-            
-            return products;
+
+            return _mapper.CastListObject<ProductViewModel, ICollection<Product?>>(products);
         }
 
-        public Task<Product> GetProductById(Guid id)
+        public async Task<ICollection<ProductViewModel>> GetFilteredProducts(CategoryEnum? category)
         {
-            throw new NotImplementedException();
+
+            var products = await _productRepository.GetFilteredProductsAsync(category);
+
+
+            return _mapper.CastListObject<ProductViewModel, ICollection<Product>>(products);
+        }
+
+        public async Task<ICollection<ProductViewModel>> GetSearchedProducts(string? search)
+        {
+            var products = await _productRepository.GetSearchedProducts(search);
+
+
+            return _mapper.CastListObject<ProductViewModel, ICollection<Product>>(products);
+        }
+
+
+        public async Task<ProductViewModel> GetProductById(Guid id)
+        {
+            var product = await _productRepository.GetAsync(id);
+
+            return _mapper.Map<ProductViewModel>(product);
         }
 
         public Task UpdateProduct(ProductDto product)
         {
-            throw new NotImplementedException();
+
+            var productEntity = _mapper.Map<Product>(product);
+
+            _productRepository.Update(productEntity);
+
+            return _unitOfWork.SaveChangesAsync();
+
+        }
+
+        public async Task<ICollection<ProductViewModel>> GetAllProductsByCreatedAt()
+        {
+            var products = await _productRepository.GetAllProductsByCreatedAt();
+
+            return _mapper.CastListObject<ProductViewModel, ICollection<Product>>(products);
+        }
+
+        public async Task<Product?> GetProductByIdAsEntity(Guid guid)
+        {
+            return await _productRepository.GetAsync(guid);
         }
     }
 }

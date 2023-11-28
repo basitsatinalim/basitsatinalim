@@ -1,23 +1,25 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace basitsatinalimuyg.Constants
 {
-    public class Money
-    {
+	public class Money
+	{
 
-        public Money(decimal? amount, CurrencyEnum? currency)
-        {
-            Amount = amount;
-            Currency = currency;
-        }
+		public Money(decimal? amount, CurrencyEnum? currency)
+		{
+			Amount = amount;
+			Currency = currency;
+		}
 
 
-        public decimal? Amount { get; set; }
-        public CurrencyEnum? Currency { get; set; }
-        public override string ToString()
-        {
-            return $"{Amount} {Currency}";
-        }
+		[DisplayFormat(DataFormatString = "{0:0.00}")]
+		public decimal? Amount { get; set; }
+		public CurrencyEnum? Currency { get; set; }
 
-    }
+		public override string ToString()
+		{
+			return $"{Amount} {Currency}";
+		}
+
+	}
 }

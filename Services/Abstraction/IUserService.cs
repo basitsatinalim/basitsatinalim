@@ -1,15 +1,19 @@
-﻿using basitsatinalimuyg.Dtos;
-using basitsatinalimuyg.Entities;
+﻿using basitsatinalimuyg.Entities;
+using basitsatinalimuyg.Models;
 
 namespace basitsatinalimuyg.Services.Abstraction
 {
 	public interface IUserService
 	{
 		Task<ICollection<User?>> GetAllUsers();
-		Task<User?> GetUserById(Guid id);
+		Task<UserViewModel?> GetUserById(Guid id);
+		Task<User?> GetUserByIdAsEntity(Guid id);
 		Task<User?> CreateUser(User user);
-		Task UpdateUser(User user);
-		Task DeleteUser(User user);
-		Task<User?> GetUserByEmail(string? email);
+		Task<UserViewModel> UpdateUser(User user);
+		Task<UserViewModel> DeleteUser(User user);
+		Task<UserViewModel?> GetUserByEmail(string? email);
+		Task<ICollection<AddressViewModel>> GetUserAdresses(Guid id);
+		Task<Address?>? GetAddressByIdAsEntity(Guid id);
+		Task<User?> GetUserByEmailAsEntity(string? email);
 	}
 }

@@ -33,28 +33,36 @@
 
 									<p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Sign in</p>
 
-									<form asp-action="Login" method="post" class="mx-1 mx-md-4">
-										<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+									<form 
+										asp-action="Login" 
+										asp-route-redirectUrl=@Context.Request.Query["redirectUrl"] 
+										method="post" 
+										class="mx-1 mx-md-4 needs-validation row g-3" 
+										novalidate>
 
-										<div class="d-flex flex-row align-items-center mb-4">
-											<i class="fa-solid fa-square-envelope fa-lg me-3"></i>
-											<div class="form-outline flex-fill mb-0">
-												<input asp-for="Email" type="email" id="email" class="form-control" placeholder="Your Email" />
-												<span asp-validation-for="Email" class="text-danger"></span>
+										<div class="input-group has-validation">
+											<span class="input-group-text" id="email"><i class="fa-solid fa-square-envelope fa-lg" style="color: #000000;"></i></span>
+											<div class="form-floating flex-fill">
+												<input  asp-for="Email" placeholder="Email" type="text" class="form-control" id="email" required>
+												<label for="email">Email</label>
+											</div>
+											<div class="invalid-feedback">
+												Please enter your email correctly.
 											</div>
 										</div>
 
-										<div class="d-flex flex-row align-items-center mb-4">
-											<i class="fa-solid fa-lock fa-lg me-3"></i>
-											<div class="d-flex flex-row align-items-center gap-2 flex-fill">
-												<div class="form-outline flex-fill">
-													<input asp-for="Password" type="password" id="form3Example1c" class="form-control" placeholder="Password" />
-													<span asp-validation-for="Password" class="text-danger"></span>
-												</div>
+										<div class="input-group has-validation">
+											<span class="input-group-text" id="password"><i class="fa-solid fa-key" style="color: #000000;"></i></span>
+											<div class="form-floating flex-fill">
+												<input asp-for="Password" placeholder="Password" type="password" class="form-control" id="password" required>
+												<label for="password">Password</label>
+											</div>
+											<div class="invalid-feedback">
+												Please enter your password correctly.
 											</div>
 										</div>
 										<div class="d-flex flex-row justify-content-start align-items-center mb-5">
-											<i class="fa-solid fa-cookie fa-lg me-3"></i>
+											<img src="~/assets/cookie.svg" height="22px" class="me-3" style="color:#E6CEA0 "></img>
 											<div class="form-check">
 												<input asp-for="RememberMe" class="btn form-check-input btn-dark me-2" type="checkbox" id="keepmeloggedin" />
 												<label asp-for="RememberMe" class="form-check-label" for="keepmeloggedin">
@@ -83,6 +91,23 @@
 			</div>
 		</div>
 	</div>
+	<script>
+		(function () {
+			'use strict'
 
+			var forms = document.querySelectorAll('.needs-validation')
+			Array.prototype.slice.call(forms)
+				.forEach(function (form) {
+					form.addEventListener('submit', function (event) {
+						if (!form.checkValidity()) {
+							event.preventDefault()
+							event.stopPropagation()
+						}
+
+						form.classList.add('was-validated')
+					}, false)
+				})
+		})()
+	</script>
 </body>
 </html>

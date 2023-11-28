@@ -1,0 +1,292 @@
+﻿@model basitsatinalimuyg.Models.CheckoutViewModel
+@using basitsatinalimuyg.Entities;
+
+
+<style>
+	.add-address-card:hover {
+		cursor: pointer;
+		background-color: rgba(0, 0, 0, 0.85) !important;
+	}
+
+	.gradient-custom {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		min-width: 0;
+		word-wrap: break-word;
+		background-color: #ede8de;
+		background-clip: border-box;
+		border: 1px solid #23406f;
+		border-radius: 7px;
+	}
+
+	.cnt-shopping {
+		background-color: #4e3cc6;
+		color: #fff;
+		border: none;
+		border-radius: 5px;
+		cursor: pointer;
+	}
+
+	.cnt-shopping:hover {
+		background-color: #3a2ba3;
+		color: #fff;
+		border: none;
+		border-radius: 5px;
+		cursor: pointer;
+	}
+</style>
+
+
+<section class="h-100">
+	<div class="container py-5 h-100">
+		<div class="row d-flex justify-content-center align-items-center h-100">
+			<div class="col-12">
+				<div class="card card-registration card-registration-2" style="border-radius: 15px;">
+					<div class="card-body p-0">
+						<div class="row g-0">
+							<div class="col-lg-8">
+								<div class="p-5">
+									<div class="d-flex justify-content-between align-items-center">
+										<p class="mb-0 display-6">Checkout</p>
+									</div>
+									<hr class="my-4">
+									<ul class="nav nav-tabs nav-fill" id="checkoutTab" role="tablist">
+										<li class="nav-item" role="presentation">
+											<button class="nav-link active text-dark" id="address-tab" data-bs-toggle="tab"
+												data-bs-target="#address-tab-pane" type="button" role="tab" aria-controls="address-tab-pane"
+												aria-selected="true">Address</button>
+										</li>
+										<li class="nav-item" role="presentation">
+											<button class="nav-link text-dark" x-data :disabled="$store.userPaymentInfo.addressId == ''"
+												id="payment-tab" data-bs-toggle="tab" data-bs-target="#payment-tab-pane" type="button"
+												role="tab" aria-controls="payment-tab-pane" aria-selected="false">Payment</button>
+										</li>
+									</ul>
+									@*tab panes*@
+									<div class="tab-content" id="checkoutTabContent">
+										@*address pane*@
+										<div class="tab-pane fade show active container" id="address-tab-pane" role="tabpanel"
+											aria-labelledby="address-tab" tabindex="0">
+
+											<p class="lead mt-4 text-danger" x-data x-show="$store.userPaymentInfo.addressId == ''">You need
+												select at least one address</p>
+											<div class="row">
+												<div class="card text-bg-dark mt-4 me-2 add-address-card col" data-bs-toggle="offcanvas"
+													data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
+													<div class="card-header">+ Add Adress</div>
+													<div class="card-body">
+														<h5 class="card-title">New Address</h5>
+														<p class="card-text">add another adress</p>
+													</div>
+												</div>
+												<div class="col-8">
+													@if (Model.UserAddresses != null)
+													{
+														@foreach (var address in Model.UserAddresses)
+														{
+															<partial name="Components/_AddressPartial" model="address" />
+														}
+													}
+												</div>
+											</div>
+
+
+										</div>
+										@*payment pane*@
+										<div class="tab-pane fade" id="payment-tab-pane" role="tabpanel" aria-labelledby="payment-tab"
+											tabindex="0">
+											<partial name="Components/_PaymentPartial" />
+										</div>
+									</div>
+									<div class="pt-5">
+										<h6 class="mb-0">
+											<a asp-action="Index" asp-controller="Cart" class="text-body">
+												<i class="fas fa-long-arrow-alt-left me-2"></i>Back to cart
+											</a>
+										</h6>
+									</div>
+								</div>
+							</div>
+							<div class="col-lg-4" style="border-left: 1px solid #bbb;">
+								<div class="p-5" x-data>
+									<div class="d-flex justify-content-between align-items-center">
+										<p class="mb-0 display-6">Order Summary</p>
+									</div>
+									<hr class="my-4">
+									<div class="row mb-4 d-flex justify-content-between align-items-center">
+										<div class="col-6">
+											<h6 class="mb-0">Subtotal</h6>
+										</div>
+										<div class="col-6 text-end">
+											<h6 class="mb-0" x-text="`${$store.userCart.total}₺`"></h6>
+										</div>
+									</div>
+									<div class="row mb-4 d-flex justify-content-between align-items-center">
+										<div class="col-6">
+											<h6 class="mb-0">Delivery</h6>
+										</div>
+										<div class="col-6 text-end">
+											<h6 class="mb-0">30₺</h6>
+										</div>
+									</div>
+									<div class="row mb-4 d-flex justify-content-between align-items-center">
+										<div class="col-6">
+											<h6 class="mb-0">Tax</h6>
+										</div>
+										<div class="col-6 text-end">
+											<h6 class="mb-0">No</h6>
+										</div>
+									</div>
+									<hr class="my-4">
+									<div class="row mb-4 d-flex justify-content-between align-items-center">
+										<div class="col-6">
+											<h6 class="mb-0">Total</h6>
+										</div>
+										<div class="col-6 text-end">
+											<h6 class="mb-0" x-text="`${parseFloat($store.userCart.total) + 30.00}₺`"></h6>
+										</div>
+									</div>
+									<div class="row mb-4 d-flex justify-content-between align-items-center">
+										<button type="button" x-on:click="$store.userPaymentInfo.applyOrder()"
+											:data-bs-toggle="!$store.userPaymentInfo.isConfirmedData ? '' : 'modal'"
+											:data-bs-target="!$store.userPaymentInfo.isConfirmedData ? '' : '#orderResult'"
+											class="btn w-100 btn-outline-dark  justify-content-center">
+											Apply Order
+										</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+</section>
+
+@* add address panel *@
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+	<div class="offcanvas-header">
+		<h5 class="offcanvas-title" id="offcanvasRightLabel">Offcanvas right</h5>
+		<button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+	</div>
+	<div class="offcanvas-body">
+
+		<form asp-action="Create" asp-controller="Address" asp-route-returnUrl=@Context.Request.Path
+			class="row g-3 needs-validation" method="post" novalidate>
+			<div class="col-md-6">
+				<div class="input-group has-validation ">
+					<span class="input-group-text" id="AddressLine"><i class="fa-solid fa-tag"></i></span>
+					<div class="form-floating flex-fill">
+						<input style="outline: none !important; box-shadow: none;" name="AddressLine" placeholder="Address Line"
+							type="text" class="form-control" id="AddressLine" required>
+						<label for="AddressLine">Address Line</label>
+					</div>
+					<div class="invalid-feedback">
+						Address line is required.
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="input-group has-validation ">
+					<span class="input-group-text" id="AddressTitle"><i class="fa-solid fa-tag"></i></span>
+					<div class="form-floating flex-fill">
+						<input style="outline: none !important; box-shadow: none;" name="AddressTitle" placeholder="Address Title"
+							type="text" class="form-control" id="AddressTitle" required>
+						<label for="AddressTitle">Address Title</label>
+					</div>
+					<div class="invalid-feedback">
+						Address Title is required.
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+
+<div class="modal fade" id="orderResult" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+	aria-labelledby="staticBackdropLabel" aria-hidden="true">
+	<div class="modal-dialog modal-lg modal-dialog-centered">
+		<div class="modal-content">
+			<div class="modal-body p-5">
+				<div x-data x-show="$store.userPaymentInfo.isLoading">
+					<div class="d-flex justify-content-center">
+						<div class="spinner-border" role="status">
+							<span class="visually-hidden">Loading...</span>
+						</div>
+					</div>
+				</div>
+				<div x-data x-show="!$store.userPaymentInfo.isLoading && $store.userPaymentInfo.orderStatus" class="container">
+					<div class="row mb-4">
+						<div class="col-12 d-flex justify-content-center">
+							<img src="~/assets/success.png" height="200" alt="Success">
+						</div>
+					</div>
+					<div class="row">
+						<p class="text-center display-6">Thank you for ordering!</p>
+					</div>
+					<div class="row">
+						<div class="col-12">
+							<p class="lead text-center text-muted">Order is successfully created</p>
+						</div>
+					</div>
+					<div class="row px-5">
+						<div class="col-5">
+
+							<a asp-action="Order" asp-controller="Profile" type="button"
+								class="btn btn-lg btn-outline-dark w-100"><span class="lead">View
+									Orders</span></a>
+
+						</div>
+						<div class="col-7 text-center">
+							<a asp-action="Index" asp-controller="Home" type="button" class="btn btn-lg w-100 cnt-shopping"><span
+									class="lead">Continue Shopping</span></a>
+						</div>
+					</div>
+				</div>
+				<div x-data x-show="!$store.userPaymentInfo.isLoading && !$store.userPaymentInfo.orderStatus" class="container">
+					<div class="row mb-4">
+						<div class="col-12 d-flex justify-content-center">
+							<img height="200" src="https://img.icons8.com/3d-plastilina/138/cancel--v1.png" alt="error" />
+						</div>
+					</div>
+					<div class="row">
+						<p class="text-center display-6">Something went wrong!</p>
+					</div>
+					<div class="row mb-4">
+						<div class="col-12">
+							<p class="lead text-center text-muted">Try again after few minutes, maybe our system is not powerful
+								enough.</p>
+							<p class="blockquote-footer text-center text-muted">Also you could think your credit cart is the problem.
+							</p>
+						</div>
+					</div>
+					<div class="row px-5">
+						<div class="col-5">
+
+							<button type="button" class="btn btn-lg btn-outline-dark w-100" data-bs-dismiss="modal"><span
+									class="lead">Try again!</span></button>
+
+						</div>
+						<div class="col-7 text-center">
+							<a asp-action="Index" asp-controller="Home" type="button" class="btn btn-lg w-100 cnt-shopping"><span
+									class="lead">Go Home 🚑</span></a>
+						</div>
+					</div>
+				</div>
+
+
+			</div>
+
+		</div>
+	</div>
+</div>
+
+<script>
+
+	document.addEventListener('alpine:init', function () {
+
+		Alpine.store('userCart').count == 0 ? window.location.href = '/Cart' : null;
+
+	})
+
+</script>

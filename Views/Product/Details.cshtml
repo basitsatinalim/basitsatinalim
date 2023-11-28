@@ -1,66 +1,64 @@
-﻿@model basitsatinalimuyg.Entities.Product
+﻿@model basitsatinalimuyg.Models.ProductViewModel
+@using basitsatinalimuyg.Services.Abstraction;
+@using System.Linq;
+@using System.Threading.Tasks;
+@using System.Text.Json.Serialization;
+@using System.Text.Json;
 
 @{
     ViewData["Title"] = "Details";
+
+    var productService = Context.RequestServices.GetService<IProductService>();
+
+    var relatedComponents = await productService?.GetFilteredProducts(Model.Category);
+
+    var relatedProducts = relatedComponents?.Where(item => item.Id != Model.Id).Take(4).ToList();
+
+
+    var json = JsonSerializer.Serialize(Model, new JsonSerializerOptions
+            {
+                Converters = { new JsonStringEnumConverter(JsonNamingPolicy.CamelCase) }
+            }
+    );
+
 }
 
-<h1>Details</h1>
+<section class="py-5">
+    <div class="container px-4 px-lg-5 my-5">
+        <div class="row gx-4 gx-lg-5 align-items-center">
+            <div class="col-md-6 bg-white"><img class="card-img-top mb-5 mb-md-0 p-4" src=@Model?.ImageUrl width="600"
+                    height="700" alt=@Model?.Name></div>
+            <div class="col-md-6">
+                <h1 class="display-5 fw-bolder">@Model?.Name</h1>
 
-<div>
-    <h4>Product</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Price)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Price)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ImageUrl)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ImageUrl)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Category)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Category)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Stock)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Stock)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CreatedAt)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CreatedAt)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.UpdatedAt)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.UpdatedAt)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+                <a asp-action="Index" asp-route-category=@Model?.Category asp-controller="Product"
+                    class="lead text-muted" style="text-decoration: none;">@Model?.Category</a>
+                <div class="fs-4 mb-5 mt-3"><span>@Model?.Price?.Amount₺</span></div>
+                <p class="lead mb-5">@Model?.Description</p>
+                <div class="d-flex px-5">
+                    <button class="btn btn-outline-dark flex-shrink-0 w-100" x-data
+                        x-on:click="$store.userCart.add(@json)" type="button"
+                        style="outline: none !important; box-shadow: none;">
+                        <i class="fa-solid fa-cart-shopping me-2"></i>Add to cart
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<section class="py-3 bg-light">
+    <div class="container px-4 px-lg-5 mt-5">
+        <p class="mb-4 display-5 ">Related products</p>
+        <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+            @if (relatedProducts != null)
+            {
+                @foreach (var item in relatedProducts)
+                {
+                    <partial name="Components/_ProductCard" model="item" />
+                }
+            }
+        </div>
+    </div>
+</section>

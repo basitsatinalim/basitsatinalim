@@ -1,8 +1,10 @@
 ﻿@using basitsatinalimuyg.Constants;
+@using basitsatinalimuyg.Dtos;
 @model basitsatinalimuyg.Dtos.ProductDto
 
 @{
 	ViewData["Title"] = "Create";
+
 }
 
 <h1>Create</h1>
@@ -10,79 +12,122 @@
 <h4>Product</h4>
 <hr />
 <div class="row">
-	<div class="col-md-4">
-		<form asp-action="Create" class="row g-3 needs-validation" novalidate>
-			<div class="col-md-4">
-				<label asp-for="Name" for="name" class="form-label">Name</label>
-				<input asp-for="Name" type="text" class="form-control" id="name" required>
-				<div class="invalid-feedback">
-					Please enter a valid name.
+	<div class="col-md-12">
+		<form asp-action="Create" class="row g-3 needs-validation" method="post" novalidate>
+			<div class="col-md-6">
+				<div class="input-group has-validation ">
+					<span class="input-group-text" id="name"><i class="fa-solid fa-tag"></i></span>
+					<div class="form-floating flex-fill">
+						<input style="outline: none !important; box-shadow: none;" asp-for="Name" placeholder="Name" type="text"
+							class="form-control" id="name" required>
+						<label for="name">Name</label>
+					</div>
+					<div class="invalid-feedback">
+						Name is required.
+					</div>
 				</div>
 			</div>
-			<div class="col-md-4">
-				<label asp-for="Description" for="description" class="form-label">Description</label>
-				<textarea asp-for="Description" type="" class="form-control" id="description" required>
-</textarea>
+			<div class="col-md-6">
+				<div class="input-group has-validation">
+
+					<span class="input-group-text" id="category"><i class="fa-solid fa-list-check"></i></span>
+					<div class="form-floating flex-fill">
+						<select asp-for="Category" class="form-select" id="category" name="category" required selected
+							style="outline: none !important; box-shadow: none;">
+							@foreach (var category in Enum.GetNames<CategoryEnum>().Select((value, index) => (value, index)))
+							{
+								<option value="@category.index">@category.value</option>
+							}
+						</select>
+						<label for="category">Category</label>
+					</div>
+					<div class="invalid-feedback">
+						Category is required field.
+					</div>
+				</div>
+			</div>
+			<div class="input-group has-validation col-md-12">
+
+				<span class="input-group-text" id="description"><i class="fa-solid fa-quote-left"></i></span>
+				<div class="form-floating flex-fill">
+					<textarea asp-for="Description" placeholder="Description" class="form-control" id="description"
+						style="height:100px; outline: none !important; box-shadow: none;">
+						</textarea>
+					<label for="description">Description</label>
+				</div>
 				<div class="invalid-feedback">
 					Please enter the description.
 				</div>
 			</div>
-
 			<div class="col-md-4">
-				<label asp-for="Amount" for="amount" class="form-label">Amount</label>
+
 				<div class="input-group has-validation">
-					<input asp-for="Amount" type="number" step=".01" class="form-control" id="amount" required>
+					<span class="input-group-text" id="amount">
+						<i class="fa-solid fa-coins"></i>
+					</span>
+					<div class="form-floating flex-fill">
+
+						<input style="outline: none !important; box-shadow: none;" asp-for="Amount" placeholder="Amount"
+							type="number" step=".01" min="0" pattern="^\d+(?:\.\d{1,2})?$" class="form-control" id="amount" required>
+						<label for="amount">Amount</label>
+					</div>
 					<div class="invalid-feedback">
-						Amount is required field.
+						Amount field is required.
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="input-group has-validation">
+					<span class="input-group-text" id="currency"><i class="fa-solid fa-hand-holding-dollar"></i></span>
+					<div class="form-floating flex-fill">
+						<select asp-for="Currency" class="form-select" id="currency" name="Currency" required selected
+							style="outline: none !important; box-shadow: none;">
+							@foreach (var currency in Enum.GetNames<CurrencyEnum>().Select((value, index) => (value, index)))
+							{
+								<option value="@currency.index">@currency.value</option>
+							}
+						</select>
+						<label for="currency">Currency</label>
+					</div>
+					<div class="invalid-feedback">
+						Currency is required field.
 					</div>
 				</div>
 			</div>
 
-
-			<div class="col-md-6">
-				<label asp-for="Currency" for="currency" class="form-label">Currency</label>
-				<select asp-for="Currency" class="form-select" id="currency" name="currency" required selected>
-					@foreach (var currency in Enum.GetNames<CurrencyEnum>().Select((value, index) => (value, index)))
-					{
-						<option value="@currency.index">@currency.value</option>
-					}
-				</select>
-				<div class="invalid-feedback">
-					Currency is required field.
-				</div>
-			</div>
-
-			<div class="col-md-6">
-				<label asp-for="Category" for="category" class="form-label">Category</label>
-				<select asp-for="Category" class="form-select" id="category" name="category" required selected>
-					@foreach (var category in Enum.GetNames<CategoryEnum>().Select((value, index) => (value, index)))
-					{
-						<option value="@category.index">@category.value</option>
-					}
-				</select>
-				<div class="invalid-feedback">
-					Category is required field.
-				</div>
-			</div>
-
 			<div class="col-md-4">
-				<label asp-for="Stock" for="stock" class="form-label">Stock</label>
+
 				<div class="input-group has-validation">
-					<input asp-for="Stock" type="number" step="1" class="form-control" id="stock" required>
+					<span class="input-group-text" id="stock">
+						<i class="fa-solid fa-cubes-stacked"></i>
+					</span>
+					<div class="form-floating flex-fill">
+						<input style="outline: none !important; box-shadow: none;" asp-for="Stock" placeholder="Stock" type="number"
+							step="1" min="0" class="form-control" id="stock" required>
+						<label for="stock">Stock</label>
+					</div>
 					<div class="invalid-feedback">
 						You need to provide the stock.
 					</div>
 				</div>
 			</div>
+			<div class="col-md-12">
 
-			<div class="col-md-4">
-				<label asp-for="ImageUrl" for="imgurl" class="form-label">Image Url</label>
-				<input asp-for="ImageUrl" type="text" class="form-control" id="imgurl" required>
-				<div class="invalid-feedback">
-					Please enter a image url.
+				<div class="input-group has-validation">
+					<span class="input-group-text" id="imgurl">
+						<i class="fa-solid fa-image"></i>
+					</span>
+					<div class="form-floating flex-fill">
+
+						<input style="outline: none !important; box-shadow: none;" asp-for="ImageUrl" placeholder="ImageUrl"
+							type="text" class="form-control" id="imgurl" required>
+						<label for="imgurl">Image Url</label>
+					</div>
+					<div class="invalid-feedback">
+						Please enter a image url.
+					</div>
 				</div>
 			</div>
-
 			<div class="col-12">
 				<button class="btn btn-primary" type="submit">Submit form</button>
 			</div>
@@ -100,10 +145,7 @@
 	(function () {
 		'use strict'
 
-		// Fetch all the forms we want to apply custom Bootstrap validation styles to
 		var forms = document.querySelectorAll('.needs-validation')
-
-		// Loop over them and prevent submission
 		Array.prototype.slice.call(forms)
 			.forEach(function (form) {
 				form.addEventListener('submit', function (event) {
@@ -117,4 +159,3 @@
 			})
 	})()
 </script>
-

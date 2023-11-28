@@ -1,0 +1,42 @@
+@model string
+@{
+}
+<style>
+  .list-group-item {
+    text-decoration: none;
+    outline: none;
+    border: none;
+    border-radius: 8px !important;
+  }
+
+  .list-group-item.active {
+    background-color: rgba(235, 192, 64, 0.2) !important;
+  }
+
+  .list-group-item:hover {
+    background-color: rgba(235, 192, 64, 0.2) !important;
+    transition: 0.3s ease-in-out;
+  }
+</style>
+<section class="section_sidebar">
+  <div class="card" style="background-color: #f1ece2">
+    <div class="card-header">
+      @Model's Account
+    </div>
+    <div class="card-body">
+      <ul class="list-group gap-2" style="!important" x-data>
+
+        <a class="lead text-dark col list-group-item list-group-item-action bg-transparent"
+          :class="window.location.pathname === '/Profile' ? 'active' : ''" style="text-decoration:none; border:none"
+          asp-action="Index" asp-controller="Profile">
+          <i class="fa-solid fa-user fa-sm me-2"></i> <span>Profile</span>
+        </a>
+
+        <a class="lead text-dark col list-group-item list-group-item-action bg-transparent" asp-action="Order"
+          :class="window.location.pathname.includes('Order') ? 'active' : ''" asp-controller="Profile">
+          <i class="fa-solid fa-truck-ramp-box fa-xs me-2"></i><span>My Orders</span>
+        </a>
+      </ul>
+    </div>
+  </div>
+</section>
