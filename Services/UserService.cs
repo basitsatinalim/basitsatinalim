@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using basitsatinalimuyg.Behaviors;
 using basitsatinalimuyg.Config;
+using basitsatinalimuyg.Dtos;
 using basitsatinalimuyg.Entities;
 using basitsatinalimuyg.Models;
 using basitsatinalimuyg.Repositories.Abstraction;
@@ -72,7 +73,7 @@ namespace basitsatinalimuyg.Services
 			return user;
 		}
 
-		public async Task<Address?>? GetAddressByIdAsEntity(Guid id)
+		public async Task<Address?> GetAddressByIdAsEntity(Guid id)
 		{
 			return await _adressRepository.GetAsync(id);
 		}
@@ -81,5 +82,44 @@ namespace basitsatinalimuyg.Services
 		{
 			return await _userRepository.GetUserByEmail(email);
 		}
+
+		public async Task AddUserAddress(Guid userId, AddresDto userAddress)
+		{
+			var user = await _userRepository.GetAsync(userId) ?? throw new Exception("User not found");
+
+			var address = _mapper.Map<Address>(userAddress);
+
+			address.UserId = userId;
+			address.User = user;
+
+			await _adressRepository.AddAsync(address);
+			await _unitOfWork.SaveChangesAsync();
+
+		}
+
+		public async Task DeleteUserAddress(Guid userId, Guid addressId)
+		{
+			var user = await _userRepository.GetAsync(userId)
+			?? throw new Exception("User not found");
+
+			var address = await _adressRepository.GetAsync(addressId);
+
+			_adressRepository.Delete(address);
+			await _unitOfWork.SaveChangesAsync();
+		}
+
+		public async Task UpdateUserAddress(Guid userId, AddresDto userAddress)
+		{
+			var user = await _userRepository.GetAsync(userId)
+			?? throw new Exception("User not found");
+
+			var address = await _adressRepository.GetAsync(userAddress.Id ?? Guid.Empty);
+
+			address = _mapper.Map(userAddress, address);
+
+			_adressRepository.Update(address);
+			await _unitOfWork.SaveChangesAsync();
+		}
+
 	}
 }

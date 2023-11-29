@@ -1,0 +1,74 @@
+@{
+
+}
+
+<form asp-action="Add" asp-controller="Address" method="post" asp-route-returnUrl=@Context.Request.Path
+  class="row g-3 needs-validation" novalidate>
+  <div class="col-md-6">
+    <div class="input-group has-validation ">
+      <span class="input-group-text" id="AddressTitle"><i class="fa-solid fa-location-dot"></i></span>
+      <div class="form-floating flex-fill">
+        <input style="outline: none !important; box-shadow: none;" name="AddressTitle" placeholder="Address Title"
+          type="text" class="form-control" id="AddressTitle" required>
+        <label for="AddressTitle">Address Title</label>
+      </div>
+      <div class="invalid-feedback">
+        Address Title is required.
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="input-group has-validation ">
+      <span class="input-group-text" id="AddressLine"><i class="fa-solid fa-house"></i></span>
+      <div class="form-floating flex-fill">
+        <input style="outline: none !important; box-shadow: none;" name="AddressLine" placeholder="Address Line"
+          type="text" class="form-control" id="AddressLine" required>
+        <label for="AddressLine">Address Line</label>
+      </div>
+      <div class="invalid-feedback">
+        Address line is required.
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="input-group has-validation ">
+      <span class="input-group-text" id="Country"><i class="fa-solid fa-globe"></i></span>
+      <div class="form-floating flex-fill">
+        <input style="outline: none !important; box-shadow: none;" name="Country" placeholder="Country" type="text"
+          class="form-control" id="Country" required>
+        <label for="Country">Country</label>
+      </div>
+      <div class="invalid-feedback">
+        Country is required.
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="input-group has-validation ">
+      <span class="input-group-text" id="City"><i class="fa-solid fa-city"></i></span>
+      <div class="form-floating flex-fill">
+        <input style="outline: none !important; box-shadow: none;" name="City" placeholder="City" type="text"
+          class="form-control" id="City" required>
+        <label for="City">City</label>
+      </div>
+      <div class="invalid-feedback">
+        City is required.
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6">
+    <div class="input-group has-validation ">
+      <span class="input-group-text" id="PostalCode"><i class="fa-solid fa-signs-post"></i></span>
+      <div class="form-floating flex-fill">
+        <input style="outline: none !important; box-shadow: none;" name="PostalCode" placeholder="Postal Code"
+          type="text" class="form-control" id="PostalCode" required>
+        <label for="PostalCode">Postal Code</label>
+      </div>
+      <div class="invalid-feedback">
+        Postal Code is required.
+      </div>
+    </div>
+  </div>
+  <button class="btn btn-primary" type="submit">Add</button>
+</form>

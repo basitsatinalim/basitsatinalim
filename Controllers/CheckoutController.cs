@@ -64,30 +64,31 @@ namespace basitsatinalimuyg.Controllers
 
 			var user = await _userService.GetUserByIdAsEntity(Guid.Parse(User?.Identity?.Name ?? Guid.Empty.ToString()));
 
-			var address = await _userService.GetAddressByIdAsEntity(Guid.Parse(checkout.AddressId ?? Guid.Empty.ToString()));
 
 			if (user == null)
 			{
 				return Json(new { success = false, message = $"User not found." });
 			}
 
+
+
 			var order = _mapper.Map<Order>(checkout);
 
 			order.UserId = user.Id;
 			order.User = user;
 			order.Status = OrderStatusEnum.Pending;
-			order.ShippingAddressId = address?.Id;
+			order.ShippingAddressId = Guid.Parse(checkout.AddressId ?? Guid.Empty.ToString());
 
 
-			var items = JsonSerializer.Deserialize<ICollection<CartItem>>(checkout.Items, new JsonSerializerOptions
+			var items = checkout.Items != null
+				? JsonSerializer.Deserialize<ICollection<CartItem>>(checkout.Items, new JsonSerializerOptions
+				{
+					PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+				})
+				: null;
+
+			foreach (var cartItem in items ?? new List<CartItem>())
 			{
-				PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-			});
-
-			foreach (var cartItem in items)
-			{
-
-
 				var product = await _productService.GetProductById(Guid.Parse(cartItem.ProductId ?? Guid.Empty.ToString()));
 
 				if (product == null)

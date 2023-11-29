@@ -24,6 +24,8 @@ namespace basitsatinalimuyg.Config
 
             CreateMap<Address, AddressViewModel>();
 
+            CreateMap<AddresDto, Address>();
+
             CreateMap<CartItem, OrderLineItem>()
               .ForMember(o => o.ProductId, b => b.MapFrom(z => z.ProductId))
               .ForMember(o => o.Count, b => b.MapFrom(z => z.Count))
