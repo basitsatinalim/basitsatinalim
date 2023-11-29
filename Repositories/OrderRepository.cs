@@ -17,7 +17,7 @@ namespace basitsatinalimuyg.Repositories
 
     public async Task<ICollection<Order>?> GetOrdersByUserId(Guid id)
     {
-      return await _appDbContext.Orders.Include(x => x.OrderLineItems).Where(x => x.UserId == id).ToListAsync();
+      return await _appDbContext.Orders.Include(x => x.OrderLineItems).Include(x => x.User).Where(x => x.UserId == id).ToListAsync();
     }
 
   }

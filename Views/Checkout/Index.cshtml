@@ -65,7 +65,7 @@
 									</ul>
 									@*tab panes*@
 									<div class="tab-content" id="checkoutTabContent">
-										@*address pane*@
+										@*address panel*@
 										<div class="tab-pane fade show active container" id="address-tab-pane" role="tabpanel"
 											aria-labelledby="address-tab" tabindex="0">
 
@@ -93,7 +93,7 @@
 
 
 										</div>
-										@*payment pane*@
+										@*payment panel*@
 										<div class="tab-pane fade" id="payment-tab-pane" role="tabpanel" aria-labelledby="payment-tab"
 											tabindex="0">
 											<partial name="Components/_PaymentPartial" />
@@ -164,42 +164,13 @@
 </section>
 
 @* add address panel *@
-<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+<div class="offcanvas offcanvas-end" tabindex="-1" id="addAdress" aria-labelledby="addAdressLabel">
 	<div class="offcanvas-header">
-		<h5 class="offcanvas-title" id="offcanvasRightLabel">Offcanvas right</h5>
+		<h5 class="offcanvas-title" id="addAdressLabel">Add Address</h5>
 		<button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
 	</div>
 	<div class="offcanvas-body">
-
-		<form asp-action="Create" asp-controller="Address" asp-route-returnUrl=@Context.Request.Path
-			class="row g-3 needs-validation" method="post" novalidate>
-			<div class="col-md-6">
-				<div class="input-group has-validation ">
-					<span class="input-group-text" id="AddressLine"><i class="fa-solid fa-tag"></i></span>
-					<div class="form-floating flex-fill">
-						<input style="outline: none !important; box-shadow: none;" name="AddressLine" placeholder="Address Line"
-							type="text" class="form-control" id="AddressLine" required>
-						<label for="AddressLine">Address Line</label>
-					</div>
-					<div class="invalid-feedback">
-						Address line is required.
-					</div>
-				</div>
-			</div>
-			<div class="col-md-6">
-				<div class="input-group has-validation ">
-					<span class="input-group-text" id="AddressTitle"><i class="fa-solid fa-tag"></i></span>
-					<div class="form-floating flex-fill">
-						<input style="outline: none !important; box-shadow: none;" name="AddressTitle" placeholder="Address Title"
-							type="text" class="form-control" id="AddressTitle" required>
-						<label for="AddressTitle">Address Title</label>
-					</div>
-					<div class="invalid-feedback">
-						Address Title is required.
-					</div>
-				</div>
-			</div>
-		</form>
+		<partial name="Components/_AddAddressForm" />
 	</div>
 </div>
 

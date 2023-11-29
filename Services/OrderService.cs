@@ -38,6 +38,14 @@ namespace basitsatinalimuyg.Services
     {
       return await _orderRepository.GetOrdersByUserId(id);
     }
+
+    public async Task DeleteOrder(Guid orderId)
+    {
+      var order = await _orderRepository.GetAsync(orderId) ?? throw new Exception("Order not found");
+
+      _orderRepository.Delete(order);
+      await _unitOfWork.SaveChangesAsync();
+    }
   }
 
 

@@ -9,7 +9,7 @@ namespace basitsatinalimuyg.Entities
 	{
 		public User User { get; set; } = null!;
 		public Guid UserId { get; set; }
-		public ICollection<OrderLineItem>? OrderLineItems { get; set; } = new List<OrderLineItem>();
+		public ICollection<OrderLineItem> OrderLineItems { get; set; } = new List<OrderLineItem>();
 		public OrderStatusEnum? Status { get; set; }
 		public Money? Total { get; set; }
 		public Guid? ShippingAddressId { get; set; }

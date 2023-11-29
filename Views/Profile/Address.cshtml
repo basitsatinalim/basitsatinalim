@@ -1,0 +1,103 @@
+@model IEnumerable<basitsatinalimuyg.Models.AddressViewModel>
+
+@{
+
+  var userName = Context.User.Claims.FirstOrDefault(x => x.Type == "FirstName")?.Value;
+
+}
+
+<style>
+  .card-input-element {
+    display: none;
+  }
+
+  .card-input:hover {
+    cursor: pointer;
+    background-color: rgba(232, 97, 0, 0.6) !important;
+    transition: all 0.3s ease-in-out;
+  }
+</style>
+
+
+<div class="container-lg p-5">
+
+  <div class="row">
+
+    <div class="col-3">
+      <partial name="Components/_ProfileSidebar" model=@userName />
+    </div>
+    <div class="col-9">
+      <section class="section_address">
+        <div class="card w-100 mb-3" style="background-color: #f1ece2; ">
+          <div class="card-header display-6 flex-fill d-flex w-100 align-items-center"
+            style="border-bottom:none!important; height:80px">
+            Your Addresses
+          </div>
+        </div>
+        <div class="card" style="background-color: #f1ece2">
+          <div class="card-body">
+            <div class="row">
+              <div class="col text-center">
+                <div class="card text-bg-dark mt-4 add-address-card card-input" data-bs-toggle="offcanvas"
+                  data-bs-target="#offcanvasAdd" aria-controls="offcanvasAdd" style="cursor:pointer">
+                  <div class="card-header">+ Add Adress</div>
+                  <div class="card-body">
+                    <h5 class="card-title">New Address</h5>
+                    <p class="card-text">add another adress</p>
+                  </div>
+                </div>
+                <div class="offcanvas offcanvas-end" tabindex="-1" data-bs-backdrop="static" id="offcanvasAdd"
+                  aria-labelledby="offcanvasAddLabel" style="width: 40vw;">
+                  <div class="offcanvas-header">
+                    <h5 class="offcanvas-title" id="offcanvasAddLabel">Add Adress</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                  </div>
+                  <div x-data class="offcanvas-body">
+                    <partial name="Components/_AddAddressForm" />
+                  </div>
+                </div>
+
+              </div>
+            </div>
+            <div class="row">
+              @if (Model != null)
+              {
+                @foreach (var address in Model)
+                {
+                  <div class="col-4">
+                    <div class="card text-bg-light mt-4 card-input" data-bs-toggle="offcanvas"
+                      data-bs-target="#@address.AddressTitle" style="cursor:pointer">
+
+                      <div class="card-header">@address.AddressTitle</div>
+                      <div class="card-body">
+                        <h5 class="card-title">@address.Country - @address.City</h5>
+                        <p class="card-text text-truncate">@address.AddressLine</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="offcanvas offcanvas-end" tabindex="-1" data-bs-backdrop="static" id="@address.AddressTitle"
+                    style="width: 40vw;">
+                    <div class="offcanvas-header">
+                      <h5 class="offcanvas-title">Edit Address</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                    </div>
+                    <div x-data class="offcanvas-body">
+                      <partial name="Components/_EditAddressForm" model="address.Id" />
+                    </div>
+                  </div>
+
+                }
+              }
+              else
+              {
+                <p class="lead mt-4 text-center">We did not find your any address record in our basement.</p>
+              }
+            </div>
+          </div>
+        </div>
+
+    </div>
+    </section>
+
+  </div>
+</div>

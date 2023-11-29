@@ -1,11 +1,7 @@
 ﻿using AutoMapper;
-using basitsatinalimuyg.Config;
-using basitsatinalimuyg.Constants;
 using basitsatinalimuyg.Dtos;
-using basitsatinalimuyg.Entities;
 using basitsatinalimuyg.Models;
 using basitsatinalimuyg.Services.Abstraction;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 
@@ -23,16 +19,6 @@ namespace basitsatinalimuyg.Controllers
 		}
 
 		[HttpGet]
-		[Authorize(Roles = $"{UserRoles.ROLE_ADMIN}")]
-		public async Task<IActionResult> Index()
-		{
-
-			var users = await _userService.GetAllUsers();
-
-			return View(_mapper.CastListObject<UserViewModel, ICollection<User?>>(users));
-		}
-
-		[HttpGet]
 		public async Task<IActionResult> Details(Guid id)
 		{
 			var user = await _userService.GetUserById(id);
@@ -46,7 +32,6 @@ namespace basitsatinalimuyg.Controllers
 		}
 
 		[HttpPost]
-
 		public async Task<IActionResult> Update(UserDto userDto)
 		{
 			var user = await _userService.GetUserByEmailAsEntity(userDto.Email);

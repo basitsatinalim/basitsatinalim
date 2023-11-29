@@ -26,15 +26,30 @@
     <div class="card-body">
       <ul class="list-group gap-2" style="!important" x-data>
 
-        <a class="lead text-dark col list-group-item list-group-item-action bg-transparent"
+        <a class="lead text-dark container list-group-item list-group-item-action bg-transparent"
           :class="window.location.pathname === '/Profile' ? 'active' : ''" style="text-decoration:none; border:none"
           asp-action="Index" asp-controller="Profile">
-          <i class="fa-solid fa-user fa-sm me-2"></i> <span>Profile</span>
+          <div class="row d-flex align-items-center justify-content-center">
+            <i class="fa-solid fa-user col-2"></i>
+            <div class="col-10">Profile</div>
+          </div>
+        </a>
+        <a class="lead text-dark container list-group-item list-group-item-action bg-transparent"
+          :class="window.location.pathname.includes('Order') ? 'active' : ''" style="text-decoration:none; border:none"
+          asp-action="Order" asp-controller="Profile">
+          <div class="row d-flex align-items-center justify-content-center">
+            <i class="fa-solid fa-truck-ramp-box fa-xs col-2"></i>
+            <div class="col-10">My Orders</div>
+          </div>
         </a>
 
-        <a class="lead text-dark col list-group-item list-group-item-action bg-transparent" asp-action="Order"
-          :class="window.location.pathname.includes('Order') ? 'active' : ''" asp-controller="Profile">
-          <i class="fa-solid fa-truck-ramp-box fa-xs me-2"></i><span>My Orders</span>
+        <a class="lead text-dark container list-group-item list-group-item-action bg-transparent"
+          :class="window.location.pathname.includes('Address') ? 'active' : ''"
+          style="text-decoration:none; border:none" asp-action="Address" asp-controller="Profile">
+          <div class="row d-flex align-items-center justify-content-center">
+            <i class="fa-solid fa-location-dot col-2"></i>
+            <div class="col-10">My Addresses</div>
+          </div>
         </a>
       </ul>
     </div>
