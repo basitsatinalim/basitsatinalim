@@ -1,159 +1,76 @@
 
+using AutoMapper;
 using basitsatinalimuyg.Constants;
+using basitsatinalimuyg.Context;
+using basitsatinalimuyg.Entities;
 using basitsatinalimuyg.Repositories.Abstraction;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace basitsatinalimuyg.Controllers
 {
-	[Route("Admin/User")]
-	[Route("Admin/User/{action}")]
 	[Authorize(Roles = $"{UserRoles.ROLE_ADMIN}")]
+	[Route("Admin/User")]
 	public class AdminUserController : Controller
 	{
-
 		private readonly IUserRepository _userRepository;
+		private readonly IUnitOfWork _unitOfWork;
+		private readonly IMapper _mapper;
 
-		public AdminUserController(IUserRepository userRepository)
+		public AdminUserController(IUserRepository userRepository, IUnitOfWork unitOfWork, IMapper mapper)
 		{
 			_userRepository = userRepository;
+			_unitOfWork = unitOfWork;
+			_mapper = mapper;
 		}
 
 
 		[HttpGet]
-		public IActionResult Index()
+		public async Task<IActionResult> Index()
 		{
-			return View();
+
+			var allUsers = await _userRepository.GetAllAsync();
+
+			return View("User/Index", allUsers);
 		}
 
-		[HttpGet("{id}")]
-		public IActionResult Detail(Guid id)
+		[HttpGet]
+		[Route("Edit/{id}")]
+		public async Task<IActionResult> Edit(Guid id)
 		{
-			return View();
+
+			var user = await _userRepository.GetAsync(id);
+			return View("User/Edit", user);
 		}
 
-		[HttpGet("Create")]
-		public IActionResult Create()
+		[HttpPost]
+		[Route("Edit/{id}")]
+		public async Task<IActionResult> Edit(Guid id, User user)
 		{
-			return View();
-		}
+			var dbUser = await _userRepository.GetAsync(id) ?? throw new NullReferenceException();
 
-		[HttpPost("Create")]
+			dbUser.Email = user.Email;
+			dbUser.Name = user.Name;
+			dbUser.Surname = user.Surname;
+			dbUser.Role = user.Role;
+			dbUser.ImageUrl = user.ImageUrl;
+			dbUser.BirthDate = user.BirthDate;
+			dbUser.Phone = user.Phone;
+			dbUser.Gender = user.Gender;
+			dbUser.UpdatedAt = DateTime.Now;
 
-		public IActionResult Create(object model)
-		{
-			return View();
-		}
-
-		[HttpGet("Edit/{id}")]
-
-		public IActionResult Edit(int id)
-		{
-			return View();
-		}
-
-		[HttpPost("Edit/{id}")]
-
-		public IActionResult Edit(int id, object model)
-		{
-			return View();
-		}
-
-		[HttpGet("Delete/{id}")]
-		public IActionResult Delete(int id)
-		{
-			return View();
+			_userRepository.Update(dbUser);
+			await _unitOfWork.SaveChangesAsync();
+			return RedirectToAction("Index");
 		}
 
 		[HttpPost("Delete/{id}")]
-
-		public IActionResult Delete(int id, object model)
+		public async Task<IActionResult> Delete(Guid id)
 		{
-			return View();
-		}
-
-		[HttpGet("ChangePassword/{id}")]
-
-		public IActionResult ChangePassword(int id)
-		{
-			return View();
-		}
-
-		[HttpPost("ChangePassword/{id}")]
-
-		public IActionResult ChangePassword(int id, object model)
-		{
-			return View();
-		}
-
-		[HttpGet("ChangeEmail/{id}")]
-
-		public IActionResult ChangeEmail(int id)
-		{
-			return View();
-		}
-
-		[HttpPost("ChangeEmail/{id}")]
-
-		public IActionResult ChangeEmail(int id, object model)
-		{
-			return View();
-		}
-
-		[HttpGet("ChangeUsername/{id}")]
-
-		public IActionResult ChangeUsername(int id)
-		{
-			return View();
-		}
-
-		[HttpPost("ChangeUsername/{id}")]
-
-		public IActionResult ChangeUsername(int id, object model)
-		{
-			return View();
-		}
-
-		[HttpGet("ChangeRole/{id}")]
-
-		public IActionResult ChangeRole(int id)
-		{
-			return View();
-		}
-
-		[HttpPost("ChangeRole/{id}")]
-
-		public IActionResult ChangeRole(int id, object model)
-		{
-			return View();
-		}
-
-		[HttpGet("ChangeStatus/{id}")]
-
-		public IActionResult ChangeStatus(int id)
-		{
-			return View();
-		}
-
-		[HttpPost("ChangeStatus/{id}")]
-
-		public IActionResult ChangeStatus(int id, object model)
-		{
-			return View();
-		}
-
-		[HttpGet("ChangeProfilePhoto/{id}")]
-
-		public IActionResult ChangeProfilePhoto(int id)
-		{
-			return View();
-		}
-
-		[HttpPost("ChangeProfilePhoto/{id}")]
-
-		public IActionResult ChangeProfilePhoto(int id, object model)
-		{
-			return View();
+			var dbUser = await _userRepository.GetAsync(id) ?? throw new NullReferenceException();
+			_userRepository.Delete(dbUser);
+			await _unitOfWork.SaveChangesAsync();
+			return RedirectToAction("Index");
 		}
 
 	}

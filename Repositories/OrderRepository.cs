@@ -20,5 +20,10 @@ namespace basitsatinalimuyg.Repositories
       return await _appDbContext.Orders.Include(x => x.OrderLineItems).Include(x => x.User).Where(x => x.UserId == id).ToListAsync();
     }
 
+    public async Task<ICollection<Order>?> GetAllOrderIncludeItemsAsync()
+    {
+      return await _appDbContext.Orders.Include(x => x.OrderLineItems).ToListAsync();
+    }
+
   }
 }

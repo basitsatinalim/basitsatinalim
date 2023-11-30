@@ -1,0 +1,69 @@
+@model IEnumerable<basitsatinalimuyg.Entities.Product>
+
+@{
+  Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="card shadow mb-4 w-100">
+  <div class="card-header py-3 d-flex align-items-center justify-content-between">
+    <p class="m-0 font-weight-bold text-primary display-6">Products</p>
+    <a asp-controller="AdminProduct" asp-action="Create" class="btn btn-primary btn-icon-split float-right">
+      <span class="icon text-white-50">
+        <i class="fas fa-plus"></i>
+      </span>
+      <span class="text">Add Product</span>
+    </a>
+  </div>
+  <div class="card-body">
+    <div class="table-responsive">
+      <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Amount</th>
+            <th>Currency</th>
+            <th>ImageUrl</th>
+            <th>Category</th>
+            <th>Stock</th>
+            <th>CreatedAt</th>
+            <th>UpdatedAt</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @foreach (var item in Model)
+          {
+            <tr>
+              <td>@item.Name</td>
+              <td>@item.Price?.Amount</td>
+              <td>@item.Price?.Currency</td>
+              <td>@item.ImageUrl</td>
+              <td>@item.Category</td>
+              <td>@item.Stock</td>
+              <td>@item.CreatedAt</td>
+              <td>@item.UpdatedAt</td>
+              <td>
+                <div class="d-flex align-items-center justify-content-center">
+                  <div class="dropdown no-arrow">
+                    <button class="dropdown-toggle w-100 cnt-shopping text-white" id="@item.Id" data-toggle="dropdown"
+                      aria-haspopup="true" aria-expanded="false">
+                      <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="@item.Id">
+                      <a class="dropdown-item" asp-controller="AdminProduct" asp-action="Edit" asp-route-id="@item.Id"><i
+                          class="fa-regular fa-pen-to-square me-2"></i>Edit Product</a>
+                      <a class="dropdown-item" asp-controller="AdminProduct" asp-action="Delete"
+                        asp-route-id="@item.Id"><i class="fa-solid fa-ban me-2" style="color: #d02525;"></i>Delete Product
+                      </a>
+                    </div>
+
+                  </div>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

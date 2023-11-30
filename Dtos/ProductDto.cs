@@ -3,8 +3,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace basitsatinalimuyg.Dtos
 {
-    public class ProductDto
+	public class ProductDto
 	{
+		public Guid? Id { get; set; }
 		[Required]
 		[MinLength(3)]
 		[MaxLength(50)]

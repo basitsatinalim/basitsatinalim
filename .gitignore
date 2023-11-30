@@ -364,3 +364,5 @@ Migrations/
 FodyWeavers.xsd
 
 .vscode/
+
+wwwroot/template

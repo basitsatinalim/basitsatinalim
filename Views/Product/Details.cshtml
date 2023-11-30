@@ -4,11 +4,10 @@
 @using System.Threading.Tasks;
 @using System.Text.Json.Serialization;
 @using System.Text.Json;
-
+@inject IProductService productService;
 @{
     ViewData["Title"] = "Details";
 
-    var productService = Context.RequestServices.GetService<IProductService>();
 
     var relatedComponents = await productService?.GetFilteredProducts(Model.Category);
 

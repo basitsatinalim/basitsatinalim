@@ -1,5 +1,6 @@
 ﻿
 using basitsatinalimuyg.Constants;
+using NuGet.Protocol.Plugins;
 
 namespace basitsatinalimuyg.Entities
 {
@@ -17,5 +18,7 @@ namespace basitsatinalimuyg.Entities
 		public DateTime? BirthDate { get; set; }
 		public ICollection<Order> Orders { get; } = new List<Order>();
 
+
+		public string FullName => $"{Name} {Surname}";
 	}
 }

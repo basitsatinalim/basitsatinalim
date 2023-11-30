@@ -1,6 +1,5 @@
-using basitsatinalimuyg.Behaviors;
-using basitsatinalimuyg.Config;
 using basitsatinalimuyg.Context;
+using basitsatinalimuyg.Config;
 using basitsatinalimuyg.Middlewares;
 using basitsatinalimuyg.Repositories;
 using basitsatinalimuyg.Repositories.Abstraction;
@@ -10,10 +9,17 @@ using basitsatinalimuyg.Utils;
 using basitsatinalimuyg.Utils.Abstraction;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc.Razor;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
+
+builder.Services.Configure<RazorViewEngineOptions>(options =>
+	 {
+		 options.ViewLocationExpanders.Add(new CustomViewLocationExpander());
+	 });
+
 
 builder.Services.AddDbContext<AppDbContext>(options =>
 options.UseNpgsql(builder.Configuration.GetConnectionString("basicecomm")));
@@ -61,9 +67,11 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
+
+
 app.MapControllerRoute(
 	name: "default",
-	pattern: "{controller=Home}/{action=Index}/{id?}");
-
+	pattern: "{controller=Home}/{action=Index}/{id?}"
+);
 
 app.Run();

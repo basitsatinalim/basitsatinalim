@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using basitsatinalimuyg.Behaviors;
+using basitsatinalimuyg.Context;
 using basitsatinalimuyg.Config;
 using basitsatinalimuyg.Dtos;
 using basitsatinalimuyg.Entities;
@@ -102,7 +102,7 @@ namespace basitsatinalimuyg.Services
 			var user = await _userRepository.GetAsync(userId)
 			?? throw new Exception("User not found");
 
-			var address = await _adressRepository.GetAsync(addressId);
+			var address = await _adressRepository.GetAsync(addressId) ?? throw new Exception("Address not found");
 
 			_adressRepository.Delete(address);
 			await _unitOfWork.SaveChangesAsync();
@@ -113,7 +113,7 @@ namespace basitsatinalimuyg.Services
 			var user = await _userRepository.GetAsync(userId)
 			?? throw new Exception("User not found");
 
-			var address = await _adressRepository.GetAsync(userAddress.Id ?? Guid.Empty);
+			var address = await _adressRepository.GetAsync(userAddress.Id ?? Guid.Empty) ?? throw new Exception("Address not found");
 
 			address = _mapper.Map(userAddress, address);
 

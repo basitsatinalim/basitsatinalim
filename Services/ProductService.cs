@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using basitsatinalimuyg.Behaviors;
+using basitsatinalimuyg.Context;
 using basitsatinalimuyg.Config;
 using basitsatinalimuyg.Constants;
 using basitsatinalimuyg.Dtos;
@@ -79,15 +79,22 @@ namespace basitsatinalimuyg.Services
             return _mapper.Map<ProductViewModel>(product);
         }
 
-        public Task UpdateProduct(ProductDto product)
+        public async Task UpdateProduct(Guid id, ProductDto product)
         {
+            var dbProduct = await _productRepository.GetAsync(id) ?? throw new Exception("Product not found");
 
-            var productEntity = _mapper.Map<Product>(product);
 
-            _productRepository.Update(productEntity);
+            dbProduct.Name = product.Name;
+            dbProduct.Description = product.Description;
+            dbProduct.Price.Amount = product.Amount;
+            dbProduct.Price.Currency = product.Currency;
+            dbProduct.ImageUrl = product.ImageUrl;
+            dbProduct.Category = product.Category;
+            dbProduct.Stock = product.Stock;
+            dbProduct.UpdatedAt = DateTime.Now;
 
-            return _unitOfWork.SaveChangesAsync();
-
+            _productRepository.Update(dbProduct);
+            await _unitOfWork.SaveChangesAsync();
         }
 
         public async Task<ICollection<ProductViewModel>> GetAllProductsByCreatedAt()

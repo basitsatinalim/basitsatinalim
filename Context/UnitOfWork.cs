@@ -1,6 +1,5 @@
-﻿using basitsatinalimuyg.Context;
-
-namespace basitsatinalimuyg.Behaviors
+﻿
+namespace basitsatinalimuyg.Context
 {
 	public class UnitOfWork : IUnitOfWork
 	{
