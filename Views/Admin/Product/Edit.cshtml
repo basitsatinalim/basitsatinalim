@@ -1,7 +1,8 @@
-﻿@model basitsatinalimuyg.Models.ProductViewModel
-@using basitsatinalimuyg.Constants
+﻿@model basitsatinalimuyg.Dtos.ProductDto
+@using basitsatinalimuyg.Constants;
 
 @{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
     ViewData["Title"] = "Edit";
 }
 
@@ -10,8 +11,9 @@
 <h4>Product</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit" class="row g-3 needs-validation" method="post" novalidate>
+    <div class="col-md-12">
+        <form asp-action="Edit" asp-controller="AdminProduct" asp-route-id=@Model.Id class="row g-3 needs-validation"
+            method="post" novalidate>
             <div class="col-md-6">
                 <div class="input-group has-validation ">
                     <span class="input-group-text" id="name"><i class="fa-solid fa-tag"></i></span>
@@ -65,10 +67,9 @@
                         <i class="fa-solid fa-coins"></i>
                     </span>
                     <div class="form-floating flex-fill">
-
-                        <input style="outline: none !important; box-shadow: none;" name="amount" placeholder="Amount"
-                            type="number" step=".01" asp-for="@Model.Price.Amount" min="0" pattern="^\d+(?:\.\d{1,2})?$"
-                            class="form-control" id="amount" required>
+                        <input style="outline: none !important; box-shadow: none;" asp-for="Amount" placeholder="Amount"
+                            type="number" step=".01" min="0" pattern="^\d+(?:\.\d{1,2})?$" class="form-control"
+                            id="amount" required>
                         <label for="amount">Amount</label>
                     </div>
                     <div class="invalid-feedback">
@@ -113,15 +114,15 @@
                 </div>
             </div>
             <div class="col-md-12">
-
                 <div class="input-group has-validation">
                     <span class="input-group-text" id="imgurl">
                         <i class="fa-solid fa-image"></i>
                     </span>
                     <div class="form-floating flex-fill">
 
-                        <input style="outline: none !important; box-shadow: none;" asp-for="ImageUrl"
-                            placeholder="ImageUrl" type="text" class="form-control" id="imgurl" required>
+                        <input style="outline: none !important; box-shadow: none;"
+                            asp-for="ImageUrl" placeholder="ImageUrl" type="text" class="form-control" id="imgurl"
+                            required>
                         <label for="imgurl">Image Url</label>
                     </div>
                     <div class="invalid-feedback">
@@ -130,13 +131,26 @@
                 </div>
             </div>
             <div class="col-12">
-                <button class="btn btn-primary" type="submit">Submit form</button>
+                <button class="btn btn-primary" type="submit">Save</button>
             </div>
         </form>
-
     </div>
 </div>
+<script>
+    (function () {
+        'use strict'
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+        var forms = document.querySelectorAll('.needs-validation')
+        Array.prototype.slice.call(forms)
+            .forEach(function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                    }
+
+                    form.classList.add('was-validated')
+                }, false)
+            })
+    })()
+</script>

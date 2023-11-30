@@ -3,8 +3,8 @@
 @model basitsatinalimuyg.Dtos.ProductDto
 
 @{
+	Layout = "~/Views/Shared/_AdminLayout.cshtml";
 	ViewData["Title"] = "Create";
-
 }
 
 <h1>Create</h1>
@@ -111,34 +111,35 @@
 					</div>
 				</div>
 			</div>
-			<div class="col-md-12">
+			<div x-data="{imageUrl:''}" class="row mt-4">
+				<div class="col-md-10">
+					<div class="input-group has-validation">
+						<span class="input-group-text" id="imgurl">
+							<i class="fa-solid fa-image"></i>
+						</span>
+						<div class="form-floating flex-fill">
 
-				<div class="input-group has-validation">
-					<span class="input-group-text" id="imgurl">
-						<i class="fa-solid fa-image"></i>
-					</span>
-					<div class="form-floating flex-fill">
+							<input x-model.debounce.750="imageUrl" style="outline: none !important; box-shadow: none;"
+								asp-for="ImageUrl" placeholder="ImageUrl" type="text" class="form-control" id="imgurl" required>
+							<label for="imgurl">Image Url</label>
+						</div>
+						<div class="invalid-feedback">
+							Please enter a image url.
+						</div>
+					</div>
+				</div>
+				<div class="col-md-2" x-show="imageUrl">
 
-						<input style="outline: none !important; box-shadow: none;" asp-for="ImageUrl" placeholder="ImageUrl"
-							type="text" class="form-control" id="imgurl" required>
-						<label for="imgurl">Image Url</label>
-					</div>
-					<div class="invalid-feedback">
-						Please enter a image url.
-					</div>
+					<img x-bind:src="imageUrl" style="width: 75%; height: 58px; border: 1px solid #fff; border-radius:5px" />
+
 				</div>
 			</div>
 			<div class="col-12">
-				<button class="btn btn-primary" type="submit">Submit form</button>
+				<button class="btn btn-primary" type="submit">Add</button>
 			</div>
 		</form>
 
 	</div>
-</div>
-
-
-<div>
-	<a asp-action="Index">Back to List</a>
 </div>
 
 <script>

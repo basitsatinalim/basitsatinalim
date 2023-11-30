@@ -1,4 +1,4 @@
-﻿namespace basitsatinalimuyg.Behaviors
+﻿namespace basitsatinalimuyg.Context
 {
 	public interface IUnitOfWork
 	{

@@ -1,5 +1,7 @@
 ﻿@using basitsatinalimuyg.Constants;
 @using basitsatinalimuyg.Services.Abstraction;
+@using System.Security.Claims;
+@inject IUserService userService;
 
 @{
 
@@ -9,7 +11,7 @@
 	{
 		var userId = Guid.Parse(User.Identity.Name!);
 
-		user = await Context.RequestServices.GetService<IUserService>()!.GetUserById(userId);
+		user = await userService.GetUserById(userId);
 
 	}
 
@@ -71,12 +73,26 @@
 							}
 
 						</button>
+
 						<ul class="dropdown-menu" aria-labelledby="navbarDropdown1">
+
 							<li><a class="dropdown-item text-truncate" asp-action="Index" asp-controller="Profile"
 									style="max-width:170px">Welcome, @user!.Name</a></li>
 							<li>
 								<hr class="dropdown-divider" />
 							</li>
+							@if (User.Claims.Where(x => x.Type == ClaimTypes.Role).Any(x => x.Value == UserRoles.ROLE_ADMIN))
+							{
+								<li>
+									<a class="dropdown-item" asp-action="Index" asp-controller="Admin"><i
+											class="fa-solid fa-user-tie me-1"></i>
+										Admin Panel</a>
+
+								</li>
+								<li>
+									<hr class="dropdown-divider" />
+								</li>
+							}
 							<li>
 								<a asp-action="Logout" asp-controller="Auth" class="dropdown-item"><i
 										class="fa-solid fa-right-from-bracket"></i> Logout</a>

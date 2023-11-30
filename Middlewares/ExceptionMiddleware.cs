@@ -11,8 +11,9 @@
 			catch
 			{
 
-				context.Response.StatusCode = 500;
+				context.Response.StatusCode = 404;
 				context.Response.Redirect("/Home/Error");
+
 			}
 		}
 	}

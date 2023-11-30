@@ -14,7 +14,7 @@ namespace basitsatinalimuyg.Services.Abstraction
 		Task<ICollection<ProductViewModel>> GetAllProductsByCreatedAt();
 		Task<ProductViewModel> GetProductById(Guid id);
 		Task<ProductViewModel> CreateProduct(ProductDto newProduct);
-		Task UpdateProduct(ProductDto product);
+		Task UpdateProduct(Guid id, ProductDto product);
 		Task DeleteProduct(Guid id);
 		Task<Product?> GetProductByIdAsEntity(Guid guid);
 	}

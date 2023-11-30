@@ -1,5 +1,5 @@
 using AutoMapper;
-using basitsatinalimuyg.Behaviors;
+using basitsatinalimuyg.Context;
 using basitsatinalimuyg.Entities;
 using basitsatinalimuyg.Repositories.Abstraction;
 using basitsatinalimuyg.Services.Abstraction;

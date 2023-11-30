@@ -1,9 +1,8 @@
 @model Guid
 @using basitsatinalimuyg.Services.Abstraction
+@inject IUserService userService
 
 @{
-
-  var userService = Context.RequestServices.GetService<IUserService>() as IUserService;
 
   var selectedAddress = await userService?.GetAddressByIdAsEntity(Model);
 

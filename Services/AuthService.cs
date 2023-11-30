@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
-using basitsatinalimuyg.Behaviors;
-using basitsatinalimuyg.Constants;
+using basitsatinalimuyg.Context;
 using basitsatinalimuyg.Dtos;
 using basitsatinalimuyg.Entities;
 using basitsatinalimuyg.Repositories.Abstraction;
@@ -51,7 +50,8 @@ namespace basitsatinalimuyg.Services
 
 		}
 
-		private async Task<bool> IsEmailExist(string email) {
+		private async Task<bool> IsEmailExist(string email)
+		{
 			return await _userService.GetUserByEmail(email) != null;
 		}
 	}
