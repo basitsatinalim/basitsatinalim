@@ -57,8 +57,6 @@ namespace basitsatinalimuyg.Controllers
 		public async Task<IActionResult> Index([FromBody] CheckoutDto checkout)
 		{
 
-			Console.WriteLine(checkout.Cvv);
-
 			if (checkout.AddressId == null)
 			{
 				return Json(new { success = false, message = $"Address is not provided." });

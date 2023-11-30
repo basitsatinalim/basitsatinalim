@@ -28,7 +28,7 @@ namespace basitsatinalimuyg.Config
             .ForMember(o => o.Price, b => b.MapFrom(z => new Money(z.Amount, z.Currency)));
 
             CreateMap<CheckoutDto, Order>()
-                .ForMember(o => o.Payment, b => b.MapFrom(z => new Payment(z.CardNumber, z.Cvv, z.ExpirationDate, z.HolderName)))
+                .ForMember(o => o.Payment, b => b.MapFrom(z => new Payment(z.CardNumber, z.HolderName, z.ExpirationDate, z.Cvv)))
                 .ForMember(o => o.Total, b => b.MapFrom(z => new Money(z.Total, CurrencyEnum.TRY)));
 
             CreateMap<User, User>();

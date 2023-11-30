@@ -54,93 +54,100 @@
           <div class="card-body">
             <div class="row">
               <div class="col-12">
-
-                @foreach (var order in Model.Orders)
+                @if (Model.Orders.Count == 0)
                 {
-
-                  <div class="card mb-3">
-                    <div class="card-header" style="background-color: #EEE6D6;">
-                      <div class="row">
-                        <div class="col">
-                          <div class="row">
-                            <span class="text-muted fw-bold" style="font-size:small;">Order Date</span>
-                          </div>
-                          <div class="row text-black" style="font-weight: 200;">
-                            <span class="text-muted">@order.Date</span>
-                          </div>
-                        </div>
-                        <div class="col">
-                          <div class="row">
-                            <span class="text-muted fw-bold" style="font-size:small;">Order Summary</span>
-                          </div>
-                          <div class="row text-black" style="font-weight: 200;">
-                            <span class="text-muted">@order?.OrderLineItems?.Count items</span>
-                          </div>
-                        </div>
-                        <div class="col">
-                          <div class="row">
-                            <span class="text-muted fw-bold" style="font-size:small;">Order Delivery</span>
-                          </div>
-                          <div class="row text-black" style="font-weight: 200;">
-                            <span class="text-muted">@order?.User.Name</span>
-                          </div>
-                        </div>
-                        <div class="col">
-                          <div class="row">
-                            <span class="text-muted fw-bold" style="font-size:small;">Total Price</span>
-                          </div>
-                          <div class="row text-black" style="font-weight: 200; ">
-                            <span class="" style="color:#4e3cc6">@order?.Total?.Amount
-                              @order?.Total?.Currency</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="card-body" style="background-color: #EEE6D6;">
-                      <div class="card">
-                        <div class="card-body" style="background-color: #E9DFC9;">
-
-                          <div class="row d-flex align-items-center">
-                            <div class="col-3 lead text-muted">
-                              <img src="~/assets/success.png" alt="box" width="30" height="30">
-                              @order?.Status
-                            </div>
-                            <div class="col-7">
-                              <div class="row">
-                                @if (order?.OrderLineItems != null)
-                                {
-                                  @foreach (var item in order?.OrderLineItems)
-                                  {
-                                    var product = await GetOrderProduct(item);
-                                    <a asp-action="Details" asp-route-id=@product?.Id asp-controller="Product"
-                                      class="col-2 me-2 py-1 d-flex align-item-center justify-content-center mb-2"
-                                      style="background-color:#fff; border-radius:8px; border:solid 1px #000">
-
-                                      <img src=@product?.ImageUrl alt=@product?.Name width="55" height="80"
-                                        style="background-color:#f1ece2; border-radius:8px;">
-
-                                    </a>
-                                  }
-                                }
-                              </div>
-                            </div>
-                            <div class="col-2 d-flex align-items-center justify-content-center">
-                              <button class="nav-link dropdown-toggle cnt-shopping w-50 text-white" id="detailsOrder"
-                                data-bs-toggle="dropdown" aria-expanded="false" style="font-weight: 300;"></button>
-                              <ul class="dropdown-menu" aria-labelledby="detailsOrder">
-                                <li><a class="dropdown-item" asp-route-orderId=@order?.Id asp-controller="Profile"
-                                    asp-action="DeleteOrder">Delete Order</a></li>
-                              </ul>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
+                  <div class="alert alert-secondary text-center" role="alert">
+                    You have no orders yet.
                   </div>
                 }
+                else
+                {
+                  @foreach (var order in Model.Orders)
+                  {
 
+                    <div class="card mb-3">
+                      <div class="card-header" style="background-color: #EEE6D6;">
+                        <div class="row">
+                          <div class="col">
+                            <div class="row">
+                              <span class="text-muted fw-bold" style="font-size:small;">Order Date</span>
+                            </div>
+                            <div class="row text-black" style="font-weight: 200;">
+                              <span class="text-muted">@order.Date</span>
+                            </div>
+                          </div>
+                          <div class="col">
+                            <div class="row">
+                              <span class="text-muted fw-bold" style="font-size:small;">Order Summary</span>
+                            </div>
+                            <div class="row text-black" style="font-weight: 200;">
+                              <span class="text-muted">@order?.OrderLineItems?.Count items</span>
+                            </div>
+                          </div>
+                          <div class="col">
+                            <div class="row">
+                              <span class="text-muted fw-bold" style="font-size:small;">Order Delivery</span>
+                            </div>
+                            <div class="row text-black" style="font-weight: 200;">
+                              <span class="text-muted">@order?.User.Name</span>
+                            </div>
+                          </div>
+                          <div class="col">
+                            <div class="row">
+                              <span class="text-muted fw-bold" style="font-size:small;">Total Price</span>
+                            </div>
+                            <div class="row text-black" style="font-weight: 200; ">
+                              <span class="" style="color:#4e3cc6">@order?.Total?.Amount
+                                @order?.Total?.Currency</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="card-body" style="background-color: #EEE6D6;">
+                        <div class="card">
+                          <div class="card-body" style="background-color: #E9DFC9;">
+
+                            <div class="row d-flex align-items-center">
+                              <div class="col-3 lead text-muted">
+                                <img src="~/assets/success.png" alt="box" width="30" height="30">
+                                @order?.Status
+                              </div>
+                              <div class="col-7">
+                                <div class="row">
+                                  @if (order?.OrderLineItems != null)
+                                  {
+                                    @foreach (var item in order?.OrderLineItems)
+                                    {
+                                      var product = await GetOrderProduct(item);
+                                      <a asp-action="Details" asp-route-id=@product?.Id asp-controller="Product"
+                                        class="col-2 me-2 py-1 d-flex align-item-center justify-content-center mb-2"
+                                        style="background-color:#fff; border-radius:8px; border:solid 1px #000">
+
+                                        <img src=@product?.ImageUrl alt=@product?.Name width="55" height="80"
+                                          style="background-color:#f1ece2; border-radius:8px;">
+
+                                      </a>
+                                    }
+                                  }
+                                </div>
+                              </div>
+                              <div class="col-2 d-flex align-items-center justify-content-center">
+                                <button class="nav-link dropdown-toggle cnt-shopping w-50 text-white" id="detailsOrder"
+                                  data-bs-toggle="dropdown" aria-expanded="false" style="font-weight: 300;"></button>
+                                <ul class="dropdown-menu" aria-labelledby="detailsOrder">
+                                  <li><a class="dropdown-item" asp-route-orderId=@order?.Id asp-controller="Profile"
+                                      asp-action="DeleteOrder">Delete Order</a></li>
+                                </ul>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                    </div>
+                  }
+                }
               </div>
             </div>
           </div>
