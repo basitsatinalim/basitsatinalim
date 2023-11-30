@@ -63,7 +63,6 @@ namespace basitsatinalimuyg.Controllers
     }
 
     [HttpGet("Edit/{id}")]
-    [Authorize(Roles = $"{UserRoles.ROLE_ADMIN}")]
     public async Task<IActionResult> Edit(Guid? id)
     {
       var productId = id?.ToString();
@@ -79,7 +78,6 @@ namespace basitsatinalimuyg.Controllers
 
     [HttpPost("Edit/{id}")]
     [ValidateAntiForgeryToken]
-    [Authorize(Roles = $"{UserRoles.ROLE_ADMIN}")]
     public async Task<IActionResult> Edit(Guid id, [Bind("Name,Description,Amount,Currency,ImageUrl,Category,Stock")] ProductDto product)
     {
       if (ModelState.IsValid)
@@ -99,7 +97,6 @@ namespace basitsatinalimuyg.Controllers
 
     [HttpGet]
     [Route("Delete/{id}")]
-    [Authorize(Roles = $"{UserRoles.ROLE_ADMIN}")]
     public async Task<IActionResult> Delete(Guid? id)
     {
       var productId = id?.ToString();

@@ -57,6 +57,8 @@ namespace basitsatinalimuyg.Controllers
 		public async Task<IActionResult> Index([FromBody] CheckoutDto checkout)
 		{
 
+			Console.WriteLine(checkout.Cvv);
+
 			if (checkout.AddressId == null)
 			{
 				return Json(new { success = false, message = $"Address is not provided." });
@@ -69,8 +71,6 @@ namespace basitsatinalimuyg.Controllers
 			{
 				return Json(new { success = false, message = $"User not found." });
 			}
-
-
 
 			var order = _mapper.Map<Order>(checkout);
 

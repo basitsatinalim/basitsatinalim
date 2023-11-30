@@ -11,14 +11,12 @@ namespace basitsatinalimuyg.Services
     private readonly IUnitOfWork _unitOfWork;
     private readonly IOrderRepository _orderRepository;
     private readonly IOrderLineRepository _orderLineRepository;
-    private readonly IMapper _mapper;
 
-    public OrderService(IMapper mapper, IUnitOfWork unitOfWork, IOrderRepository orderRepository, IOrderLineRepository orderLineRepository)
+    public OrderService(IUnitOfWork unitOfWork, IOrderRepository orderRepository, IOrderLineRepository orderLineRepository)
     {
       _unitOfWork = unitOfWork;
       _orderRepository = orderRepository;
       _orderLineRepository = orderLineRepository;
-      _mapper = mapper;
     }
 
     public async Task SaveOrder(Order order)
@@ -45,6 +43,11 @@ namespace basitsatinalimuyg.Services
 
       _orderRepository.Delete(order);
       await _unitOfWork.SaveChangesAsync();
+    }
+
+    public async Task<ICollection<Order>?> GetAllOrderAsync()
+    {
+      return await _orderRepository.GetAllOrderIncludeItemsAsync();
     }
   }
 

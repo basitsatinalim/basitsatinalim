@@ -59,7 +59,7 @@ namespace basitsatinalimuyg.Controllers
 				var authProperties = new AuthenticationProperties
 				{
 					AllowRefresh = true,
-					ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(30),
+					ExpiresUtc = DateTimeOffset.UtcNow.AddDays(1),
 					IsPersistent = login.RememberMe,
 					IssuedUtc = DateTimeOffset.UtcNow,
 					RedirectUri = redirectUrl

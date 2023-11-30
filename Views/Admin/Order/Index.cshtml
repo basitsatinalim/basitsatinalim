@@ -1,0 +1,101 @@
+@model IEnumerable<basitsatinalimuyg.Entities.Order>
+@using basitsatinalimuyg.Services.Abstraction;
+@{
+  Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+}
+
+<h1 class="h3 mb-4 text-gray-800">Orders</h1>
+<div class="card shadow mb-4 ">
+  <div class="card-header py-3">
+    <h6 class="m-0 font-weight-bold text-primary">Orders</h6>
+  </div>
+  <div class="card-body">
+    <div class="table-responsive">
+      <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+        <thead>
+          <tr>
+            <th>Id</th>
+            <th>UserId</th>
+            <th>OrderLineItems</th>
+            <th>Status</th>
+            <th>Amount</th>
+            <th>Currency</th>
+            <th>ShippingAddressId</th>
+            <th>Payment</th>
+            <th>Date</th>
+            <th>CreatedAt</th>
+            <th>UpdatedAt</th>
+            <th>Operation</th>
+          </tr>
+        </thead>
+        <tbody>
+          @foreach (var order in Model)
+          {
+            <tr>
+              <td>@order.Id</td>
+              <td>@order.UserId</td>
+              <td>@order.OrderLineItems.Count</td>
+              <td>@order.Status</td>
+              <td>@order.Total?.Amount</td>
+              <td>@order.Total?.Currency</td>
+              <td>@order.ShippingAddressId</td>
+              <td>
+                @if (order.Payment != null)
+                {
+                  <div class="card bg-light  p-2">
+                    <div class=row>
+                      <div class="col">
+                        <span class="text-success text-xs">Card Number</span>
+                        <p>@order.Payment.CardNumber</p>
+                      </div>
+                    </div>
+                    <div class=row>
+                      <div class="col">
+                        <span class="text-success text-xs">Holder name</span>
+                        <p>@order.Payment.HolderName</p>
+                      </div>
+                    </div>
+                    <div class=row>
+                      <div class="col">
+                        <span class="text-success text-xs">Cvv</span>
+                        <p>@order.Payment.Cvv</p>
+                      </div>
+                      <div class="col">
+                        <span class="text-success text-xs">Expration</span>
+                        <p>@order.Payment.ExpirationDate</p>
+                      </div>
+
+                    </div>
+
+                  </div>
+                }
+              </td>
+              <td>@order.Date</td>
+              <td>@order.CreatedAt</td>
+              <td>@order.UpdatedAt</td>
+              <td>
+                <div class="d-flex align-items-center justify-content-center">
+                  <div class="dropdown no-arrow">
+                    <button class="dropdown-toggle w-100 cnt-shopping text-white" id="dropdownMenuLink"
+                      data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
+                      aria-labelledby="dropdownMenuLink">
+                      <a class="dropdown-item" asp-controller="AdminOrder" asp-action="Delete" asp-route-id="@order.Id"><i
+                          class="fa-solid fa-ban me-2" style="color: #d02525;"></i>Delete Order
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+
+
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

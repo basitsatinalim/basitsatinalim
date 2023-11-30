@@ -173,12 +173,10 @@
 					.then(data => {
 						this.setIsLoading(false)
 						if (data.success) {
-							console.log(data)
 							Alpine.store('userCart').removeLocalStorage()
 							this.orderStatus = true
 							this.orderId = data.orderId
 						} else {
-							console.log(data)
 							this.orderStatus = false
 							this.orderId = ''
 						}
@@ -203,7 +201,7 @@
 						'border-radius': '5px',
 						'box-shadow': '0 2px 5px rgba(0, 0, 0, 0.2)',
 					},
-					onClick: function () {}, // Callback after click
+					onClick: function () {},
 				}).showToast()
 			}
 		},

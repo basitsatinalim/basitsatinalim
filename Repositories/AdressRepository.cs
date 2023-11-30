@@ -15,7 +15,8 @@ namespace basitsatinalimuyg.Repositories
 
         public async Task<ICollection<Address>> GetAllAsync(Guid id)
         {
-			return await _appDbContext.Addresses.Where(x => x.UserId == id).ToListAsync();
-		}
+            return await _appDbContext.Addresses.Where(x => x.UserId == id).ToListAsync();
+        }
+
     }
 }
