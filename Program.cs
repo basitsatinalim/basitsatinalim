@@ -57,7 +57,7 @@ builder.Services.AddScoped<IOrderLineRepository, OrderLineRepository>();
 
 
 var app = builder.Build();
-// app.UseMiddleware<ExceptionMiddleware>();
+app.UseMiddleware<ExceptionMiddleware>();
 
 
 app.UseHttpsRedirection();

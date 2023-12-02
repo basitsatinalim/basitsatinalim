@@ -33,6 +33,27 @@
 				this.count += 1
 				this.setLocalStorage()
 			}
+			console.log('item added to cart')
+			Toastify({
+				text: 'Item added to cart!',
+				duration: 3000,
+				close: true,
+				gravity: 'bottom',
+				position: 'right',
+				stopOnFocus: true,
+				style: {
+					color: '#fff',
+					height: '50px',
+					bottom: '20px',
+					right: '20px',
+					'background-color': '#333',
+					color: '#fff',
+					padding: '15px',
+					'border-radius': '5px',
+					'box-shadow': '0 2px 5px rgba(0, 0, 0, 0.2)',
+				},
+				onClick: function () {},
+			}).showToast()
 		},
 		getData: id => {
 			fetch(`/Product/JsonDetails/${id}`)
@@ -153,7 +174,7 @@
 				expirationDate: this.expirationDate,
 				cvv: this.cvv,
 				holderName: this.holderName,
-				total: Alpine.store('userCart').total,
+				total: Alpine.store('userCart').total + 30.0,
 				items: JSON.stringify(Alpine.store('userCart').items),
 				count: Alpine.store('userCart').count,
 			}
