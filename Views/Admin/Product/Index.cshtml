@@ -19,6 +19,7 @@
       <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
         <thead>
           <tr>
+            <th>Id</th>
             <th>Name</th>
             <th>Amount</th>
             <th>Currency</th>
@@ -34,7 +35,10 @@
           @foreach (var item in Model)
           {
             <tr>
-              <td>@item.Name</td>
+              <td>@item.Id</td>
+              <td>
+                <a asp-controller="Product" asp-action="Details" asp-route-id="@item.Id">@item.Name</a>
+              </td>
               <td>@item.Price?.Amount</td>
               <td>@item.Price?.Currency</td>
               <td>@item.ImageUrl</td>

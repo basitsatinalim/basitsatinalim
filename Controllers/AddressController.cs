@@ -8,18 +8,18 @@ namespace basitsatinalimuyg.Controllers
   public class AddressController : Controller
   {
 
-    private readonly IUserService _userService;
+    private readonly IAddressService _addressService;
 
-    public AddressController(IUserService userService)
+    public AddressController(IAddressService addressService)
     {
-      _userService = userService;
+      _addressService = addressService;
     }
 
 
     [HttpGet]
     public async Task<IActionResult> Get(Guid addressId)
     {
-      var address = await _userService.GetAddressByIdAsEntity(addressId);
+      var address = await _addressService.GetAddressByIdAsEntity(addressId);
 
       return View(address);
     }
@@ -30,7 +30,7 @@ namespace basitsatinalimuyg.Controllers
       if (ModelState.IsValid)
       {
         var userId = Guid.Parse(User.Identity?.Name ?? Guid.Empty.ToString());
-        await _userService.AddUserAddress(userId, userAddress);
+        await _addressService.AddUserAddress(userId, userAddress);
         if (returnUrl != null) return Redirect(returnUrl);
         return RedirectToAction("Address", "Profile");
       }
@@ -41,7 +41,7 @@ namespace basitsatinalimuyg.Controllers
     public async Task<IActionResult> Delete([FromQuery(Name = "addressId")] Guid addressId)
     {
       var userId = Guid.Parse(User.Identity?.Name ?? Guid.Empty.ToString());
-      await _userService.DeleteUserAddress(userId, addressId);
+      await _addressService.DeleteUserAddress(addressId);
       return RedirectToAction("Address", "Profile");
     }
 
@@ -51,7 +51,7 @@ namespace basitsatinalimuyg.Controllers
       if (ModelState.IsValid)
       {
         var userId = Guid.Parse(User.Identity?.Name ?? Guid.Empty.ToString());
-        await _userService.UpdateUserAddress(userId, userAddress);
+        await _addressService.UpdateUserAddress(userId, userAddress);
         return RedirectToAction("Address", "Profile");
       }
       return View(userAddress);

@@ -11,11 +11,13 @@ namespace basitsatinalimuyg.Controllers
 
     private readonly IUserService _userService;
     private readonly IOrderService _orderService;
+    private readonly IAddressService _addressService;
 
-    public ProfileController(IUserService userService, IOrderService orderService)
+    public ProfileController(IUserService userService, IOrderService orderService, IAddressService addressService)
     {
       _userService = userService;
       _orderService = orderService;
+      _addressService = addressService;
     }
 
 
@@ -49,7 +51,7 @@ namespace basitsatinalimuyg.Controllers
     [HttpGet]
     public async Task<IActionResult> Address()
     {
-      var userAddresses = await _userService.GetUserAdresses(Guid.Parse(User.Identity?.Name ?? Guid.Empty.ToString()));
+      var userAddresses = await _addressService.GetUserAdresses(Guid.Parse(User.Identity?.Name ?? Guid.Empty.ToString()));
       return View(userAddresses);
     }
 

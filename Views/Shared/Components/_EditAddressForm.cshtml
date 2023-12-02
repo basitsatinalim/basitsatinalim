@@ -1,10 +1,10 @@
 @model Guid
 @using basitsatinalimuyg.Services.Abstraction
-@inject IUserService userService
+@inject IAddressService addressService
 
 @{
 
-  var selectedAddress = await userService?.GetAddressByIdAsEntity(Model);
+  var selectedAddress = await addressService?.GetAddressByIdAsEntity(Model);
 
 }
 

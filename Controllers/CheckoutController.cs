@@ -15,15 +15,17 @@ namespace basitsatinalimuyg.Controllers
 		private readonly IUserService _userService;
 		private readonly IProductService _productService;
 		private readonly IOrderService _orderService;
+		private readonly IAddressService _addressService;
 		private readonly IMapper _mapper;
 
 
-		public CheckoutController(IUserService userService, IProductService productService, IOrderService orderService, IMapper mapper)
+		public CheckoutController(IUserService userService, IProductService productService, IOrderService orderService, IMapper mapper, IAddressService addressService)
 		{
 			_userService = userService;
 			_productService = productService;
 			_orderService = orderService;
 			_mapper = mapper;
+			_addressService = addressService;
 		}
 
 		[HttpGet]
@@ -39,7 +41,7 @@ namespace basitsatinalimuyg.Controllers
 					return NotFound();
 				}
 
-				var userAdresses = await _userService.GetUserAdresses(user.Id ?? Guid.Empty);
+				var userAdresses = await _addressService.GetUserAdresses(user.Id ?? Guid.Empty);
 				return View(new CheckoutViewModel
 				{
 					UserAddresses = userAdresses,

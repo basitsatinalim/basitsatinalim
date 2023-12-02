@@ -1,13 +1,15 @@
-@model IEnumerable<basitsatinalimuyg.Entities.User>
+@model IEnumerable<basitsatinalimuyg.Entities.Address>
+
+
 
 @{
   Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-<h1 class="h3 mb-4 text-gray-800">Users</h1>
+<h1 class="h3 mb-4 text-gray-800">Addresses</h1>
 <div class="card shadow mb-4 ">
   <div class="card-header py-3">
-    <h6 class="m-0 font-weight-bold text-primary">Users</h6>
+    <h6 class="m-0 font-weight-bold text-primary">Addresses</h6>
   </div>
   <div class="card-body">
     <div class="table-responsive">
@@ -15,34 +17,30 @@
         <thead>
           <tr>
             <th>Id</th>
-            <th>Name</th>
-            <th>Surname</th>
-            <th>Phone</th>
-            <th>BirthDate</th>
-            <th>Email</th>
-            <th>Gender</th>
-            <th>Role</th>
-            <th>ImageUrl</th>
+            <th>UserId</th>
+            <th>AddressTitle</th>
+            <th>AddressLine</th>
+            <th>City</th>
+            <th>Country</th>
+            <th>PostalCode</th>
             <th>CreatedAt</th>
             <th>UpdatedAt</th>
             <th>Operation</th>
           </tr>
         </thead>
         <tbody>
-          @foreach (var user in Model)
+          @foreach (var address in Model)
           {
             <tr>
-              <td>@user.Id</td>
-              <td>@user.Name</td>
-              <td>@user.Surname</td>
-              <td>@user.Phone</td>
-              <td>@user.BirthDate</td>
-              <td>@user.Email</td>
-              <td>@user.Gender</td>
-              <td>@user.Role</td>
-              <td>@user.ImageUrl</td>
-              <td>@user.CreatedAt</td>
-              <td>@user.UpdatedAt</td>
+              <td>@address.Id</td>
+              <td>@address.UserId</td>
+              <td>@address.AddressTitle</td>
+              <td>@address.AddressLine</td>
+              <td>@address.City</td>
+              <td>@address.Country</td>
+              <td>@address.PostalCode</td>
+              <td>@address.CreatedAt</td>
+              <td>@address.UpdatedAt</td>
               <td>
                 <div class="d-flex align-items-center justify-content-center">
                   <div class="dropdown no-arrow">
@@ -52,11 +50,11 @@
                     </button>
                     <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
                       aria-labelledby="dropdownMenuLink">
-                      <a class="dropdown-item" asp-action="Edit" asp-controller="AdminUser" asp-route-id="@user.Id"><i
-                          class="fa-regular fa-pen-to-square  me-2"></i>Edit
+                      <a class="dropdown-item" asp-action="Edit" asp-controller="AdminAddress" asp-route-id="@address.Id">
+                        <i class="fa-regular fa-pen-to-square  me-2"></i>Edit
                         User</a>
-                      <a class="dropdown-item" asp-controller="AdminUser" asp-action="Delete" asp-route-id="@user.Id"><i
-                          class="fa-solid fa-ban me-2" style="color: #d02525;"></i>Delete User
+                      <a class="dropdown-item" asp-controller="AdminAddress" asp-action="Delete"
+                        asp-route-id="@address.Id"><i class="fa-solid fa-ban me-2" style="color: #d02525;"></i>Delete User
                       </a>
 
                     </div>

@@ -1,0 +1,111 @@
+﻿@model basitsatinalimuyg.Entities.Address
+@using basitsatinalimuyg.Constants;
+
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>Address</h4>
+<hr />
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="Edit" asp-controller="AdminAddress" asp-route-id=@Model.Id class="row g-3 needs-validation"
+            method="post" novalidate>
+            <div class="col-md-12">
+                <div class="input-group has-validation ">
+                    <span class="input-group-text" id="AddressTitle"><i class="fa-solid fa-tag"></i></span>
+                    <div class="form-floating flex-fill">
+                        <input style="outline: none !important; box-shadow: none;" asp-for="AddressTitle"
+                            placeholder="AddressTitle" type="text" class="form-control" id="AddressTitle" required>
+                        <label for="AddressTitle">Address Title</label>
+                    </div>
+                    <div class="invalid-feedback">
+                        Address Title is required.
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="input-group has-validation">
+
+                    <span class="input-group-text" id="AddressLine"><i class="fa-solid fa-quote-left"></i></span>
+                    <div class="form-floating flex-fill">
+                        <textarea asp-for="AddressLine" placeholder="AddressLine" class="form-control" id="AddressLine"
+                            style="height:100px; outline: none !important; box-shadow: none;">
+                        </textarea>
+                        <label for="AddressLine">Address Line</label>
+                    </div>
+                    <div class="invalid-feedback">
+                        Please enter the Address Line.
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+
+                <div class="input-group has-validation ">
+                    <span class="input-group-text" id="Country"><i class="fa-solid fa-globe"></i></span>
+                    <div class="form-floating flex-fill">
+                        <input style="outline: none !important; box-shadow: none;" asp-for="Country"
+                            placeholder="Country" type="text" class="form-control" id="Country" required>
+                        <label for="Country">Country</label>
+                    </div>
+                    <div class="invalid-feedback">
+                        Country is required.
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+
+                <div class="input-group has-validation ">
+                    <span class="input-group-text" id="City"><i class="fa-solid fa-city"></i></span>
+                    <div class="form-floating flex-fill">
+                        <input style="outline: none !important; box-shadow: none;" asp-for="City" placeholder="City"
+                            type="text" class="form-control" id="City" required>
+                        <label for="City">City</label>
+                    </div>
+                    <div class="invalid-feedback">
+                        City is required.
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+
+                <div class="input-group has-validation ">
+                    <span class="input-group-text" id="PostalCode"><i class="fa-solid fa-signs-post"></i></span>
+                    <div class="form-floating flex-fill">
+                        <input style="outline: none !important; box-shadow: none;" asp-for="PostalCode"
+                            placeholder="PostalCode" type="text" class="form-control" id="PostalCode" required>
+                        <label for="PostalCode">Postal Code</label>
+                    </div>
+                    <div class="invalid-feedback">
+                        Postal Code is required.
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12">
+                <button class="btn btn-primary" type="submit">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    (function () {
+        'use strict'
+
+        var forms = document.querySelectorAll('.needs-validation')
+        Array.prototype.slice.call(forms)
+            .forEach(function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                    }
+
+                    form.classList.add('was-validated')
+                }, false)
+            })
+    })()
+</script>
