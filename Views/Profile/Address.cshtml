@@ -38,7 +38,7 @@
           <div class="card-body">
             <div class="row">
               <div class="col text-center">
-                <div class="card text-bg-dark mt-4 add-address-card card-input" data-bs-toggle="offcanvas"
+                <div class="card text-bg-dark add-address-card card-input" data-bs-toggle="offcanvas"
                   data-bs-target="#offcanvasAdd" aria-controls="offcanvasAdd" style="cursor:pointer">
                   <div class="card-header">+ Add Adress</div>
                   <div class="card-body">
@@ -60,13 +60,13 @@
               </div>
             </div>
             <div class="row">
-              @if (Model != null)
+              @if (Model.Count() > 0)
               {
                 @foreach (var address in Model)
                 {
                   <div class="col-4">
-                    <div class="card text-bg-light mt-4 card-input" data-bs-toggle="offcanvas"
-                      data-bs-target="#@address.AddressTitle" style="cursor:pointer">
+                    <div class="card text-bg-light mt-3 card-input" data-bs-toggle="offcanvas"
+                      data-bs-target="#id-@address.Id" style="cursor:pointer">
 
                       <div class="card-header">@address.AddressTitle</div>
                       <div class="card-body">
@@ -75,7 +75,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="offcanvas offcanvas-end" tabindex="-1" data-bs-backdrop="static" id="@address.AddressTitle"
+                  <div class="offcanvas offcanvas-end" tabindex="-1" data-bs-backdrop="static" id="id-@address.Id"
                     style="width: 40vw;">
                     <div class="offcanvas-header">
                       <h5 class="offcanvas-title">Edit Address</h5>

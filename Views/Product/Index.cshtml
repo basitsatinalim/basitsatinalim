@@ -2,7 +2,41 @@
 @using basitsatinalimuyg.Constants;
 @{
 	ViewData["Title"] = "Index";
+
+	var categoryLogo = new Dictionary<CategoryEnum, string>
+{
+{ CategoryEnum.Electronics, "fas fa-microchip" },
+{ CategoryEnum.Toys, "fas fa-gamepad" },
+{ CategoryEnum.Clothing, "fas fa-tshirt" },
+{ CategoryEnum.Books, "fas fa-book" },
+{ CategoryEnum.Beauty, "fas fa-magic" },
+{ CategoryEnum.Health, "fas fa-heartbeat" },
+{ CategoryEnum.Shoes, "fas fa-shoe-prints" },
+{ CategoryEnum.Home, "fas fa-home" }
+};
 }
+
+<style>
+	.list-group-item {
+		text-decoration: none;
+		outline: none;
+		border: none;
+		border-radius: 8px !important;
+	}
+
+	.list-group-item.active {
+		background-color: rgba(235, 192, 64, 0.2) !important;
+	}
+
+	.list-group-item.active i {
+		color: #4e3cc6 !important;
+	}
+
+	.list-group-item:hover {
+		background-color: rgba(235, 192, 64, 0.2) !important;
+		transition: 0.3s ease-in-out;
+	}
+</style>
 
 <p class="display-5">Products</p>
 
@@ -12,29 +46,33 @@
 	<div class="col-xl-2">
 		<p class="blockquote">Categories</p>
 		<hr />
-		<ul class="list-group">
-			@foreach (var category in Enum.GetValues<CategoryEnum>())
-			{
-				if (Context.Request.Query["category"] == category.ToString())
-				{
-					<a class="text-white lead list-group-item list-group-item-action active" style="text-decoration:none"
-						asp-action="Index" asp-route-category=@category>
-						@category
-					</a>
-					continue;
-				}
-				<a class="text-muted lead list-group-item list-group-item-action" style="text-decoration:none" asp-action="Index"
-					asp-route-category=@category>
-					@category
-				</a>
-			}
-			<a class="text-dark lead list-group-item list-group-item-action my-5"
-				style="text-decoration:none; border-top:1px solid rgba(0,0,0,.125)" asp-action="Index">
-				Remove filter
+
+		<ul class="list-group gap-2" x-data>
+			<a class="lead text-dark container list-group-item list-group-item-action bg-transparent"
+				:class="window.location.search == '' ? 'active' : ''" style="text-decoration:none; border:none"
+				asp-action="Index">
+				<div class="row d-flex align-items-center justify-content-center">
+					<i class="fas fa-list col-2 d-flex justify-content-center"></i>
+					<div class="col-10">All</div>
+				</div>
 			</a>
+			<hr class="mb-0 mt-0" />
+			@foreach (var category in categoryLogo)
+			{
+				var active = Context.Request.Query["category"] == category.Key.ToString() ? "active" : "";
+
+				<a class="lead text-dark container list-group-item list-group-item-action bg-transparent @active"
+					style="text-decoration:none; border:none" asp-action="Index" asp-route-category=@category.Key>
+					<div class="row d-flex align-items-center justify-content-center">
+						<i class="@category.Value col-2 d-flex justify-content-center"></i>
+						<div class="col-10">@category.Key</div>
+					</div>
+				</a>
+				<hr class="mb-0 mt-0" />
+			}
+
 		</ul>
 	</div>
-
 	<div class="col-xl-10 row mt-5">
 		@foreach (var item in Model)
 		{

@@ -16,11 +16,11 @@
 </style>
 
 
-<label class="w-100" style="cursor: pointer;">
+<label class="w-100 mt-3" style="cursor: pointer;">
 	<input x-data type="radio" id=@Model.Id name="product" class="card-input-element"
 		x-on:change="$store.userPaymentInfo.handleRadioChange()" />
-	<div class="card card-default text-bg-light mt-4 card-input">
-		<div class="card-header">@Model.AddressTitle Home</div>
+	<div class="card card-default text-bg-light card-input">
+		<div class="card-header">@Model.AddressTitle</div>
 		<div class="card-body">
 			<h5 class="card-title">@Model.Country - @Model.City</h5>
 			<p class="card-text">@Model.AddressLine</p>

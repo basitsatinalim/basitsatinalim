@@ -14,6 +14,24 @@
 
   }
 
+  int FindItemQuantity(Guid? id) => Model.Orders.Select(x => x.OrderLineItems).SelectMany(x => x).Where(x => x.ProductId
+  == id).Sum(x => x.Count);
+
+
+  var orderSummary = 0;
+  var orderItems = new List<ProductViewModel>();
+
+  foreach (var order in Model.Orders)
+  {
+    foreach (var item in order.OrderLineItems)
+    {
+      var product = await GetOrderProduct(item);
+      orderItems.Add(product);
+      orderSummary += item.Count;
+    }
+  }
+
+
 }
 
 <style>
@@ -56,7 +74,7 @@
               <div class="col-12">
                 @if (Model.Orders.Count == 0)
                 {
-                  <div class="alert alert-secondary text-center" role="alert">
+                  <div class="alert bg-primary-subtle text-center" role="alert">
                     You have no orders yet.
                   </div>
                 }
@@ -81,7 +99,7 @@
                               <span class="text-muted fw-bold" style="font-size:small;">Order Summary</span>
                             </div>
                             <div class="row text-black" style="font-weight: 200;">
-                              <span class="text-muted">@order?.OrderLineItems?.Count items</span>
+                              <span class="text-muted">@orderSummary items</span>
                             </div>
                           </div>
                           <div class="col">
@@ -113,18 +131,17 @@
                                 <img src="~/assets/success.png" alt="box" width="30" height="30">
                                 @order?.Status
                               </div>
-                              <div class="col-7">
+                              <div class="col-8">
                                 <div class="row">
                                   @if (order?.OrderLineItems != null)
                                   {
-                                    @foreach (var item in order?.OrderLineItems)
+                                    @foreach (var item in orderItems)
                                     {
-                                      var product = await GetOrderProduct(item);
-                                      <a asp-action="Details" asp-route-id=@product?.Id asp-controller="Product"
+                                      <a asp-action="Details" asp-route-id=@item?.Id asp-controller="Product"
                                         class="col-2 me-2 py-1 d-flex align-item-center justify-content-center mb-2"
                                         style="background-color:#fff; border-radius:8px; border:solid 1px #000">
 
-                                        <img src=@product?.ImageUrl alt=@product?.Name width="55" height="80"
+                                        <img src=@item?.ImageUrl alt=@item?.Name width="55" height="80"
                                           style="background-color:#f1ece2; border-radius:8px;">
 
                                       </a>
@@ -132,17 +149,68 @@
                                   }
                                 </div>
                               </div>
-                              <div class="col-2 d-flex align-items-center justify-content-center">
-                                <button class="nav-link dropdown-toggle cnt-shopping w-50 text-white" id="detailsOrder"
-                                  data-bs-toggle="dropdown" aria-expanded="false" style="font-weight: 300;"></button>
-                                <ul class="dropdown-menu" aria-labelledby="detailsOrder">
-                                  <li><a class="dropdown-item" asp-route-orderId=@order?.Id asp-controller="Profile"
-                                      asp-action="DeleteOrder">Delete Order</a></li>
-                                </ul>
+                              <div class="col-1 d-flex align-items-center justify-content-center">
+                                <button class="cnt-shopping text-white" type="button" data-bs-toggle="collapse"
+                                  data-bs-target="#id-@order?.Id" aria-expanded="false" aria-controls="#id-@order?.Id">
+                                  <i class="fa-solid fa-angle-down"></i>
+                                </button>
                               </div>
                             </div>
                           </div>
+
+                          <div class="collapse" id="id-@order?.Id" style="background-color: #E9DFC9; ">
+                            <hr class="my-0">
+                            <div class="d-flex flex-row align-items-center justify-content-between">
+                              <p class="lead p-2">Order Details</p>
+                              <button class="nav-link no-arrow dropdown-toggle cnt-shopping text-white me-3"
+                                id="detailsOrder" data-bs-toggle="dropdown" aria-expanded="false"
+                                style="font-weight: 300; width:50px"></button>
+                              <ul class="dropdown-menu" aria-labelledby="detailsOrder">
+                                <li><a class="dropdown-item" asp-route-orderId=@order?.Id asp-controller="Profile"
+                                    asp-action="DeleteOrder"><i class="fa-regular fa-trash-can text-danger me-2"></i>Delete
+                                    Order</a></li>
+                              </ul>
+                            </div>
+                            <div class="row d-flex align-items-center px-3">
+                              @if (order?.OrderLineItems != null)
+                              {
+                                @foreach (var item in orderItems)
+                                {
+                                  var quantity = FindItemQuantity(item.Id!);
+                                  <div class="col-6">
+                                    <div class="card mb-2 w-100" style=" background-color:#eee6d6; height:150px;">
+                                      <div class="row g-0 h-100 d-flex justify-content-center align-items-center">
+                                        <div class="col-md-4 d-flex align-items-center justify-content-center">
+                                          <a asp-action="Details" asp-route-id=@item?.Id asp-controller="Product"
+                                            class="py-1 d-flex align-item-center justify-content-center mb-2"
+                                            style="background-color:#fff; border-radius:8px; border:solid 1px #000">
+
+                                            <img src=@item?.ImageUrl alt=@item?.Name width="100" height="100"
+                                              style="background-color:#f1ece2; border-radius:8px;">
+
+                                          </a>
+                                        </div>
+                                        <div class="col-md-8 d-flex align-items-center justify-content-center">
+                                          <div class="card-body ">
+                                            <a asp-action="Details" asp-route-id=@item?.Id asp-controller="Product"
+                                              style="text-decoration: none;">
+                                              <h6 class="card-title">@item?.Name</h6>
+                                            </a>
+                                            <p class="card-text">@item?.Price?.Amount
+                                              @item?.Price?.Currency</p>
+                                            <p class="card-text">Quantity: <span class="text-body-secondary">@quantity</span>
+                                            </p>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                }
+                              }
+                            </div>
+                          </div>
                         </div>
+
                       </div>
 
                     </div>
