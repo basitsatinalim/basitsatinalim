@@ -39,7 +39,7 @@ namespace basitsatinalimuyg.Controllers
 
 				if (user == null)
 				{
-					ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+					ModelState.AddModelError(string.Empty, "Email or Password is wrong.");
 					return View();
 				}
 
@@ -75,7 +75,7 @@ namespace basitsatinalimuyg.Controllers
 
 				return RedirectToAction("Index", "Home");
 			}
-			ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+			ModelState.AddModelError(string.Empty, "Email or Password must be filled.");
 			return View();
 		}
 
@@ -110,7 +110,7 @@ namespace basitsatinalimuyg.Controllers
 
 				if (user == null)
 				{
-					ModelState.AddModelError(string.Empty, "Herhangi bir hesap bulunamadi.");
+					ModelState.AddModelError(string.Empty, "Occured an error.");
 					return View();
 				}
 

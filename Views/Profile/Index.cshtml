@@ -14,13 +14,13 @@
 
     <div class="col-9">
       <section class="section_profile">
-        <div class="card w-100 mb-3" style="background-color: #f1ece2; ">
+        <div class="card w-100 mb-3" style="background-color: #ff4911; border-radius:0; box-shadow: 8px 8px 0 0 #000;">
           <div class="card-header display-6 flex-fill d-flex w-100 align-items-center"
             style="border-bottom:none!important; height:80px">
             Account Information
           </div>
         </div>
-        <div class="card" style="background-color: #f1ece2">
+        <div class="card" style="background-color: #fff; border-radius:0; box-shadow: 8px 8px 0 0 #000;">
 
           <div class="card-body">
             <form asp-action="Update" asp-controller="User" method="post" class="mx-1 mx-md-4">
@@ -77,11 +77,11 @@
               <div class="d-flex flex-row w-100 justify-content-between align-items-center mb-4">
                 <i class="fa-solid fa-venus-mars fa-lg me-2"></i>
                 <div class="btn-group flex-fill">
-                  <input asp-for="Gender" type="radio" class="btn-check form-check-input" value=@true name="options"
+                  <input asp-for="Gender" type="radio" class="btn-check form-check-input" value=@true name="Gender"
                     id="femaleGender" autocomplete="off" checked />
                   <label class="btn form-check-label" for="femaleGender" style="color:#f8b9d4">Female</label>
 
-                  <input asp-for="Gender" type="radio" class="btn-check form-check-input" name="options" value=@false
+                  <input asp-for="Gender" type="radio" class="btn-check form-check-input" name="Gender" value=@false
                     id="maleGender" autocomplete="off" />
                   <label class="btn form-check-label" style="color:#001e3f;" for="maleGender">Male</label>
                 </div>

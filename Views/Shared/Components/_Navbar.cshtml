@@ -17,12 +17,11 @@
 
 }
 
-
 <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top"
-	style="background: rgba(222, 208, 183, 0.2)!important;">
+	style="background: rgba(255, 255, 255, 0.4)!important;">
 	<div class="container-fluid mx-4">
 		<a class="navbar-brand" asp-action="Index" asp-controller="Home">
-			<img src="~/assets/shopping_cart.svg" alt="" class="" width="50px" height="40px">
+			<img width="40" height="40" src="https://img.icons8.com/3d-fluency/40/shopaholic.png" alt="shopaholic" />
 		</a>
 		<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
 			aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -31,9 +30,12 @@
 		<div class="collapse navbar-collapse" id="navbarSupportedContent">
 			<form class="me-3" asp-action="Index" asp-controller="Product" method="get">
 				<div class="form-white input-group gap-1" style="width: 250px;">
-					<input name="search" type="search" class="form-control rounded" id="search" placeholder="Search product"
-						aria-label="Search" aria-describedby="search-addon" />
-					<button type="submit" class="input-group-text rounded"><i class="fa-solid fa-magnifying-glass"></i></button>
+					<input name="search" type="search" class="form-control" id="search" placeholder="Search product"
+						aria-label="Search" aria-describedby="search-addon"
+						style="border-radius:0; border:1px solid #000;box-shadow: 2px 2px 0 0 #000;" />
+					<button type="submit" class="input-group-text"
+						style="border-radius:0; border:1px solid #000;box-shadow: 2px 2px 0 0 #000;"><i
+							class="fa-solid fa-magnifying-glass"></i></button>
 				</div>
 			</form>
 			<ul class="navbar-nav me-auto mb-2 mb-lg-0">
@@ -43,10 +45,10 @@
 				<li class="nav-item dropdown">
 					<button class="nav-link dropdown-toggle" id="shopDD" data-bs-toggle="dropdown"
 						aria-expanded="false">Shop</button>
-					<ul class="dropdown-menu" aria-labelledby="shopDD">
+					<ul class="dropdown-menu" aria-labelledby="shopDD" style="border-radius:0; box-shadow: 4px 4px 0 0 #000;">
 						<li><a class="dropdown-item" asp-controller="Product" asp-action="Index">All Products</a></li>
 						<li>
-							<hr class="dropdown-divider">
+							<hr class="dropdown-divider" style="color:#aaa">
 						</li>
 						<li><a class="dropdown-item" href="#!">Popular Items</a></li>
 						<li><a class="dropdown-item" href="#!">New Arrivals</a></li>
@@ -65,32 +67,33 @@
 							}
 							else if (user?.Gender == false)
 							{
-								<img src="~/assets/man_placeholder.svg" class="rounded-circle" height="40" alt="" loading="lazy" />
+								<img src="~/assets/man_placeholder.svg" class="" height="40" alt="" loading="lazy" />
 							}
 							else
 							{
-								<img src="~/assets/woman_placeholder.svg" class="rounded-circle" height="40" alt="" loading="lazy" />
+								<img src="~/assets/woman_placeholder.svg" class="" height="40" alt="" loading="lazy" />
 							}
 
 						</button>
 
-						<ul class="dropdown-menu" aria-labelledby="navbarDropdown1">
+						<ul class="dropdown-menu dropstart" style="border-radius:0; box-shadow: 4px 4px 0 0 #000;"
+							aria-labelledby="navbarDropdown1">
 
 							<li><a class="dropdown-item text-truncate" asp-action="Index" asp-controller="Profile"
 									style="max-width:170px">Welcome, @user!.Name</a></li>
 							<li>
-								<hr class="dropdown-divider" />
+								<hr class="dropdown-divider" style="color:#aaa" />
 							</li>
 							@if (User.Claims.Where(x => x.Type == ClaimTypes.Role).Any(x => x.Value == UserRoles.ROLE_ADMIN))
 							{
 								<li>
-									<a class="dropdown-item" asp-action="Index" asp-controller="Admin"><i
+									<a class=" dropdown-item" asp-action="Index" asp-controller="Admin"><i
 											class="fa-solid fa-user-tie me-1"></i>
 										Admin Panel</a>
 
 								</li>
 								<li>
-									<hr class="dropdown-divider" />
+									<hr class="dropdown-divider" style="color:#aaa" />
 								</li>
 							}
 							<li>
@@ -102,11 +105,12 @@
 				}
 				else
 				{
-					<li class="nav-item me-3 me-lg-2 dropdown">
+					<li class="nav-item me-3 me-lg-2 dropdown dropstart">
 						<button class="nav-link dropdown-toggle" id="extraActions" data-bs-toggle="dropdown" aria-expanded="false">
 							<i class="fas fa-plus"></i>
 						</button>
-						<ul class="dropdown-menu" aria-labelledby="extraActions">
+						<ul class="dropdown-menu" style="border-radius:0; box-shadow: 4px 4px 0 0 #000;"
+							aria-labelledby="extraActions">
 							<li>
 								<a asp-action="Login" asp-controller="Auth" class="dropdown-item d-flex col align-items-center gap-2">
 									<i class="fa-solid fa-right-to-bracket" style="color: #000000;"></i>
@@ -126,15 +130,19 @@
 						</ul>
 					</li>
 				}
-				<li class="nav-item me-3 me-lg-0 d-flex align-items-center">
-					<form asp-action="Index" asp-controller="Cart">
-						<button class="btn btn-outline-dark" type="submit">
-							<i class="bi-cart-fill me-1"></i>Cart
-							<span x-data x-cloack x-text="$store.userCart.count"
-								class="badge bg-dark text-white ms-1 rounded-pill">0</span>
 
-						</button>
-					</form>
+				<li class="nav-item mx-3 d-flex align-items-center justify-content-center">
+
+					<a asp-action="Index" asp-controller="Cart" style="text-decoration: none;">
+						<div class="position-relative">
+							<img src="~/assets/shopping_bag.svg" width="30" height="30" alt="">
+							<span x-data x-cloack x-text="$store.userCart.count"
+								class="badge position-absolute top-100 start-0 translate-middle bg-dark text-white rounded-pill">
+
+							</span>
+
+						</div>
+					</a>
 				</li>
 
 			</ul>

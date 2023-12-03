@@ -17,20 +17,7 @@
   int FindItemQuantity(Guid? id) => Model.Orders.Select(x => x.OrderLineItems).SelectMany(x => x).Where(x => x.ProductId
   == id).Sum(x => x.Count);
 
-
-  var orderSummary = 0;
-  var orderItems = new List<ProductViewModel>();
-
-  foreach (var order in Model.Orders)
-  {
-    foreach (var item in order.OrderLineItems)
-    {
-      var product = await GetOrderProduct(item);
-      orderItems.Add(product);
-      orderSummary += item.Count;
-    }
-  }
-
+  int FindOrderQuantity(Order order) => order.OrderLineItems.Sum(x => x.Count);
 
 }
 
@@ -61,13 +48,13 @@
     </div>
     <div class="col-9">
       <section class="section_orders">
-        <div class="card w-100 mb-3" style="background-color: #f1ece2; ">
+        <div class="card w-100 mb-3" style="background-color: #9747FF; border-radius:0; box-shadow: 8px 8px 0 0 #000;">
           <div class="card-header display-6 flex-fill d-flex w-100 align-items-center"
             style="border-bottom:none!important; height:80px">
             Your Orders
           </div>
         </div>
-        <div class="card" style="background-color: #f1ece2">
+        <div class="card" style="background-color: #fff; border-radius:0; box-shadow: 8px 8px 0 0 #000;">
 
           <div class="card-body">
             <div class="row">
@@ -83,8 +70,8 @@
                   @foreach (var order in Model.Orders)
                   {
 
-                    <div class="card mb-3">
-                      <div class="card-header" style="background-color: #EEE6D6;">
+                    <div class="card mb-3" style="background-color: #FFF; border-radius:0; box-shadow: 4px 4px 0 0 #000;">
+                      <div class="card-header" style=" border-radius:0;">
                         <div class="row">
                           <div class="col">
                             <div class="row">
@@ -99,7 +86,7 @@
                               <span class="text-muted fw-bold" style="font-size:small;">Order Summary</span>
                             </div>
                             <div class="row text-black" style="font-weight: 200;">
-                              <span class="text-muted">@orderSummary items</span>
+                              <span class="text-muted">@FindOrderQuantity(order) items</span>
                             </div>
                           </div>
                           <div class="col">
@@ -122,9 +109,9 @@
                         </div>
                       </div>
 
-                      <div class="card-body" style="background-color: #EEE6D6;">
-                        <div class="card">
-                          <div class="card-body" style="background-color: #E9DFC9;">
+                      <div class="card-body" style="border-radius:0; ">
+                        <div class="card" style="background-color: #FFF; border-radius:0; ">
+                          <div class="card-body" style="border-radius:0; ">
 
                             <div class="row d-flex align-items-center">
                               <div class="col-3 lead text-muted">
@@ -135,14 +122,15 @@
                                 <div class="row">
                                   @if (order?.OrderLineItems != null)
                                   {
-                                    @foreach (var item in orderItems)
+                                    @foreach (var item in order.OrderLineItems)
                                     {
-                                      <a asp-action="Details" asp-route-id=@item?.Id asp-controller="Product"
+                                      var product = await GetOrderProduct(item);
+                                      <a asp-action="Details" asp-route-id=@product?.Id asp-controller="Product"
                                         class="col-2 me-2 py-1 d-flex align-item-center justify-content-center mb-2"
                                         style="background-color:#fff; border-radius:8px; border:solid 1px #000">
 
-                                        <img src=@item?.ImageUrl alt=@item?.Name width="55" height="80"
-                                          style="background-color:#f1ece2; border-radius:8px;">
+                                        <img src=@product?.ImageUrl alt=@product?.Name width="55" height="80"
+                                          style="background-color:#FFF; border-radius:8px;">
 
                                       </a>
                                     }
@@ -155,58 +143,60 @@
                                   <i class="fa-solid fa-angle-down"></i>
                                 </button>
                               </div>
-                            </div>
-                          </div>
+                              <div class="collapse" id="id-@order?.Id" style="background-color: #FFF; ">
+                                <hr class="my-0">
+                                <div class="d-flex flex-row align-items-center justify-content-between">
+                                  <p class="lead p-2">Order Details</p>
+                                  <button class="nav-link no-arrow dropdown-toggle cnt-shopping text-white me-3"
+                                    id="detailsOrder" data-bs-toggle="dropdown" aria-expanded="false"
+                                    style="font-weight: 300; width:50px"></button>
+                                  <ul class="dropdown-menu" aria-labelledby="detailsOrder">
+                                    <li><a class="dropdown-item" asp-route-orderId=@order?.Id asp-controller="Profile"
+                                        asp-action="DeleteOrder"><i
+                                          class="fa-regular fa-trash-can text-danger me-2"></i>Delete
+                                        Order</a></li>
+                                  </ul>
+                                </div>
+                                <div class="row d-flex align-items-center px-3">
+                                  @foreach (var item in order.OrderLineItems)
+                                  {
 
-                          <div class="collapse" id="id-@order?.Id" style="background-color: #E9DFC9; ">
-                            <hr class="my-0">
-                            <div class="d-flex flex-row align-items-center justify-content-between">
-                              <p class="lead p-2">Order Details</p>
-                              <button class="nav-link no-arrow dropdown-toggle cnt-shopping text-white me-3"
-                                id="detailsOrder" data-bs-toggle="dropdown" aria-expanded="false"
-                                style="font-weight: 300; width:50px"></button>
-                              <ul class="dropdown-menu" aria-labelledby="detailsOrder">
-                                <li><a class="dropdown-item" asp-route-orderId=@order?.Id asp-controller="Profile"
-                                    asp-action="DeleteOrder"><i class="fa-regular fa-trash-can text-danger me-2"></i>Delete
-                                    Order</a></li>
-                              </ul>
-                            </div>
-                            <div class="row d-flex align-items-center px-3">
-                              @if (order?.OrderLineItems != null)
-                              {
-                                @foreach (var item in orderItems)
-                                {
-                                  var quantity = FindItemQuantity(item.Id!);
-                                  <div class="col-6">
-                                    <div class="card mb-2 w-100" style=" background-color:#eee6d6; height:150px;">
-                                      <div class="row g-0 h-100 d-flex justify-content-center align-items-center">
-                                        <div class="col-md-4 d-flex align-items-center justify-content-center">
-                                          <a asp-action="Details" asp-route-id=@item?.Id asp-controller="Product"
-                                            class="py-1 d-flex align-item-center justify-content-center mb-2"
-                                            style="background-color:#fff; border-radius:8px; border:solid 1px #000">
+                                    var product = await GetOrderProduct(item);
 
-                                            <img src=@item?.ImageUrl alt=@item?.Name width="100" height="100"
-                                              style="background-color:#f1ece2; border-radius:8px;">
+                                    var quantity = FindItemQuantity(product?.Id);
+                                    <div class="col-6">
+                                      <div class="card mb-2 w-100"
+                                        style="border-radius:0; border:1px solid #000; box-shadow: 5px 5px 0 0 #000; background-color:#FFF; height:150px;">
+                                        <div class="row g-0 h-100 d-flex justify-content-center align-items-center">
+                                          <div class="col-md-4 d-flex align-items-center justify-content-center">
+                                            <a asp-action="Details" asp-route-id=@product?.Id asp-controller="Product"
+                                              class="py-1 d-flex align-item-center justify-content-center mb-2"
+                                              style="background-color:#fff; border-radius:8px; border:solid 1px #000">
 
-                                          </a>
-                                        </div>
-                                        <div class="col-md-8 d-flex align-items-center justify-content-center">
-                                          <div class="card-body ">
-                                            <a asp-action="Details" asp-route-id=@item?.Id asp-controller="Product"
-                                              style="text-decoration: none;">
-                                              <h6 class="card-title">@item?.Name</h6>
+                                              <img src=@product?.ImageUrl alt=@product?.Name width="100" height="100"
+                                                style="background-color:#f1ece2; border-radius:8px;">
+
                                             </a>
-                                            <p class="card-text">@item?.Price?.Amount
-                                              @item?.Price?.Currency</p>
-                                            <p class="card-text">Quantity: <span class="text-body-secondary">@quantity</span>
-                                            </p>
+                                          </div>
+                                          <div class="col-md-8 d-flex align-items-center justify-content-center">
+                                            <div class="card-body ">
+                                              <a asp-action="Details" asp-route-id=@item?.Id asp-controller="Product"
+                                                style="text-decoration: none;">
+                                                <h6 class="card-title">@product?.Name</h6>
+                                              </a>
+                                              <p class="card-text">@product?.Price?.Amount
+                                                @product?.Price?.Currency</p>
+                                              <p class="card-text">Quantity: <span
+                                                  class="text-body-secondary">@quantity</span>
+                                              </p>
+                                            </div>
                                           </div>
                                         </div>
                                       </div>
                                     </div>
-                                  </div>
-                                }
-                              }
+                                  }
+                                </div>
+                              </div>
                             </div>
                           </div>
                         </div>

@@ -6,20 +6,38 @@
     text-decoration: none;
     outline: none;
     border: none;
-    border-radius: 8px !important;
   }
 
   .list-group-item.active {
-    background-color: rgba(235, 192, 64, 0.2) !important;
+    background-color: #000 !important;
+    border: none;
+  }
+
+  .list-group-item.active div {
+    color: #fff;
+  }
+
+  .list-group-item.active i {
+    color: #fff;
   }
 
   .list-group-item:hover {
-    background-color: rgba(235, 192, 64, 0.2) !important;
+    background-color: rgba(0, 0, 0, 0.9) !important;
+    transition: 0.3s ease-in-out;
+  }
+
+  .list-group-item:hover div {
+    color: #fff;
+    transition: 0.3s ease-in-out;
+  }
+
+  .list-group-item:hover i {
+    color: #fff;
     transition: 0.3s ease-in-out;
   }
 </style>
 <section class="section_sidebar">
-  <div class="card" style="background-color: #f1ece2">
+  <div class="card" style="border-radius:0; background-color: #FFFB47; box-shadow: 8px 8px 0 0 #000;">
     <div class="card-header">
       @Model's Account
     </div>
@@ -27,16 +45,16 @@
       <ul class="list-group gap-2" x-data>
 
         <a class="lead text-dark container list-group-item list-group-item-action bg-transparent"
-          :class="window.location.pathname === '/Profile' ? 'active' : ''" style="text-decoration:none; border:none"
-          asp-action="Index" asp-controller="Profile">
+          :class="window.location.pathname === '/Profile' ? 'active' : ''"
+          style="text-decoration:none; border:none; border-radius:0; " asp-action="Index" asp-controller="Profile">
           <div class="row d-flex align-items-center justify-content-center">
             <i class="fa-solid fa-user col-2"></i>
             <div class="col-10">Profile</div>
           </div>
         </a>
         <a class="lead text-dark container list-group-item list-group-item-action bg-transparent"
-          :class="window.location.pathname.includes('Order') ? 'active' : ''" style="text-decoration:none; border:none"
-          asp-action="Order" asp-controller="Profile">
+          :class="window.location.pathname.includes('Order') ? 'active' : ''"
+          style="text-decoration:none; border-radius:0;  border:none" asp-action="Order" asp-controller="Profile">
           <div class="row d-flex align-items-center justify-content-center">
             <i class="fa-solid fa-truck-ramp-box fa-xs col-2"></i>
             <div class="col-10">My Orders</div>
@@ -45,7 +63,7 @@
 
         <a class="lead text-dark container list-group-item list-group-item-action bg-transparent"
           :class="window.location.pathname.includes('Address') ? 'active' : ''"
-          style="text-decoration:none; border:none" asp-action="Address" asp-controller="Profile">
+          style="text-decoration:none; border:none; border-radius:0; " asp-action="Address" asp-controller="Profile">
           <div class="row d-flex align-items-center justify-content-center">
             <i class="fa-solid fa-location-dot col-2"></i>
             <div class="col-10">My Addresses</div>

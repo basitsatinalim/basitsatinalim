@@ -1,7 +1,8 @@
 ﻿<div class="container py-5 h-100">
 	<div class="row d-flex justify-content-center align-items-center h-100">
 		<div class="col-12">
-			<div class="card card-registration card-registration-2" style="border-radius: 15px;">
+			<div class="card card-registration card-registration-2"
+				style="border-radius: 0; box-shadow: 8px 8px 0 0 #000; border: 1px solid #000">
 				<div class="card-body p-0">
 					<div x-cloak x-show="$store.userCart.items.length > 0" class="row g-0" x-data>
 						<div class="col-lg-8 d-flex row">
@@ -79,7 +80,7 @@
 					</div>
 					<div x-data x-cloak x-show="$store.userCart.items.length <= 0 || $store.userCart.items == undefined">
 						<div class="py-6 py-lg-12 m-5">
-							<div class="container">
+							<div class="container" style="">
 								<div class="row">
 									<div class="offset-lg-3 col-lg-6 col-md-12 col-12 text-center">
 										<img src="~/assets/bag.svg" alt="" class="img-fluid mb-4">
@@ -90,7 +91,9 @@
 											some products to your shopping cart. You will find a lot of interesting products on our shop
 											page.
 										</p>
-										<a asp-action="Index" asp-controller="Product" class="btn btn-dark">Explore Products</a>
+										<a asp-action="Index" asp-controller="Product"
+											style="box-shadow: 4px 4px 0 0 #000; border: 1px solid #000; border-radius:0"
+											class="btn btn-light">Explore Products</a>
 									</div>
 								</div>
 							</div>

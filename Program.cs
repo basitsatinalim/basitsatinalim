@@ -75,4 +75,10 @@ app.MapControllerRoute(
 	pattern: "{controller=Home}/{action=Index}/{id?}"
 );
 
+app.MapControllerRoute(
+	name: "notfound",
+	pattern: "{*url}",
+	defaults: new { controller = "Home", action = "Error" }
+);
+
 app.Run();

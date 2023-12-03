@@ -41,13 +41,14 @@ namespace basitsatinalimuyg.Controllers
 				return NotFound();
 			}
 
+
 			user.Name = userDto.Name ?? user.Name;
 			user.Surname = userDto.Surname ?? user.Surname;
 			user.Email = userDto.Email ?? user.Email;
-			user.Phone = userDto.Phone ?? user.Phone;
-			user.ImageUrl = userDto.ImageUrl ?? user.ImageUrl;
+			user.Phone = userDto.Phone;
+			user.ImageUrl = userDto.ImageUrl;
 			user.Gender = userDto.Gender;
-			user.BirthDate = userDto.BirthDate ?? user.BirthDate;
+			user.BirthDate = userDto.BirthDate;
 			user.UpdatedAt = DateTime.Now;
 
 			await _userService.UpdateUser(user);

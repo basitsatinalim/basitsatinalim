@@ -23,10 +23,13 @@
 }
 
 <section class="py-5">
-    <div class="container px-4 px-lg-5 my-5">
+    <div class="container p-5 my-5" style="box-shadow: 8px 8px 0 0 #000; border: 1px solid #000">
         <div class="row gx-4 gx-lg-5 align-items-center">
-            <div class="col-md-6 bg-white"><img class="card-img-top mb-5 mb-md-0 p-4" src=@Model?.ImageUrl width="600"
-                    height="700" alt=@Model?.Name></div>
+            <div class="col-md-6 bg-white">
+                <img class="card-img-top mb-5 mb-md-0 p-4"
+                    style="box-shadow: 8px 8px 0 0 #9747FF; border: 1px solid #000" src=@Model?.ImageUrl width="600"
+                    height="700" alt=@Model?.Name>
+            </div>
             <div class="col-md-6">
                 <h1 class="display-5 fw-bolder">@Model?.Name</h1>
 
@@ -37,7 +40,7 @@
                 <div class="d-flex px-5">
                     <button class="btn btn-outline-dark flex-shrink-0 w-100" x-data
                         x-on:click="$store.userCart.add(@json)" type="button"
-                        style="outline: none !important; box-shadow: none;">
+                        style="outline: none !important; border-radius:0; box-shadow: 4px 4px 0 0 #000; border: 1px solid #000">
                         <i class="fa-solid fa-cart-shopping me-2"></i>Add to cart
                     </button>
                 </div>
